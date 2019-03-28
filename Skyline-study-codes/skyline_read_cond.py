@@ -3,6 +3,11 @@
 """
 Created on Wed Mar 27 15:14:01 2019
 
+This script reads the file with participant's random condition attribution.
+
+You need to provide the participant's id (pp_id), as well as the column for participant's group (pp_group) and condition (pp_cond)
+ie. need to specify if male/female and main only or eeg study. 
+
 @author: claire
 """
 
