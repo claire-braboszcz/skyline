@@ -59,6 +59,9 @@ nNG_bloc = 82
 nGO_bloc = 205
 
 nBloc= 2
+
+n_rep_go =5
+n_rep_nogo = 2
 #def run_of_2(trials, obj):
  #   # check if no more than 4 "go"in a row
     
@@ -81,7 +84,7 @@ nHW = 41
 nNEG = 41
 nNEUT = 41
 
-
+n_rep_pv = 2
 
 def health_warning(stim):
     return True if 'HW' in stim  else False
@@ -114,8 +117,8 @@ def genTrialList():
     nogoStim = [stim for stim in  go_nogo_stimList if is_nogo(stim)]
     
     
-    all_go = goStim*5
-    all_nogo = nogoStim*2
+    all_go = goStim*n_rep_go
+    all_nogo = nogoStim*n_rep_nogo
     
     random.shuffle(all_go)
     random.shuffle(all_nogo)
@@ -128,9 +131,9 @@ def genTrialList():
     neg_stim = [stim for stim in pass_view_stimList if neg_pic(stim)]
     neut_stim = [stim for stim in pass_view_stimList if neut_pic(stim)]
     
-    all_hw = hw_stim *2
-    all_neg_stim = neg_stim*2
-    neut_stim = neut_stim*2
+    all_hw = hw_stim *n_rep_pv
+    all_neg_stim = neg_stim*n_rep_pv
+    neut_stim = neut_stim*n_rep_pv
     
     
      #-----------------------------------------
