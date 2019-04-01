@@ -72,7 +72,7 @@ n_rep_nogo = 2
   #          return True
    # return False
 
-
+BREAK = 10
 
 #---------------------------
 # Passive viewing Task parameters
@@ -89,8 +89,6 @@ nNEUT = 41
 n_rep_pv = 2
 
 
-
-
 def health_warning(stim):
     return True if 'HW' in stim  else False
 
@@ -99,6 +97,19 @@ def neg_pic (stim):
 
 def neut_pic (stim):
     return True if 'Neut' in stim  else False
+
+#-------------------------
+# Task Trigger codes   
+#--------------------------
+
+trig_GO = 11    
+trig_NOGO = 13
+
+trig_HW = 21
+trig_NEG = 25
+trig_NEUT = 22
+
+trig_BREAK = 50
 
 
 
@@ -129,12 +140,7 @@ def genTrialList():
     random.shuffle(all_go)
     random.shuffle(all_nogo)
     
-    all_go_b1 = all_go[0:nGO_bloc]
-    all_go_b2 = all_go[nGO_bloc :]
-    
-    all_nogo_b1 = all_nogo[0:nNG_bloc]
-    all_nogo_b2 = all_nogo[nNG_bloc :]
-    
+       
     # passive viewing
     for root, dirs, files in os.walk(filepath_pass_view, topdown=False):  # read files in folder
         pass_view_stimList = files
@@ -148,18 +154,9 @@ def genTrialList():
     all_neut = neut_stim*n_rep_pv
     
     random.shuffle(all_hw)
-    random.shuffle(all_neg_stim)
-    random.shuffle(all_neut_stim)
+    random.shuffle(all_neg)
+    random.shuffle(all_neut)
     
-    
-    all_hw_b1 = all_hw[0:nHW]
-    all_hw_b2 = all_hw[nHW:]
-
-    all_neg_b1 = all_neg[0:nNEG]
-    all_neg_b2 = all_neg[nNEG:]
-    
-    all_neut_b1 = all_neut[0:nNEUT]
-    all_neut_b2 = all_neut[nNEUT:]
     
     
      #-----------------------------------------
@@ -172,11 +169,19 @@ def genTrialList():
 
     #trial_type = [[GO]  + [NOGO]] * nNoGo + [[GO] + [GO]] * int((nGo-nNoGo)/2)
     
-    trial_type_gonogo_b1 = [[GO]  + [NOGO]] * nNG_bloc + [GO] * (nGO_bloc-nNG_bloc)   
-    trial_type_gonogo_b2 = [[GO]  + [NOGO]] * nNG_bloc + [GO] * (nGO_bloc-nNG_bloc)
+    trial_type_gonogo_b1 = [[GO]  + [NOGO]] * nNG_bloc + [[GO]] * (nGO_bloc-nNG_bloc)   
+    trial_type_gonogo_b2 = [[GO]  + [NOGO]] * nNG_bloc + [[GO]] * (nGO_bloc-nNG_bloc)
     random.shuffle(trial_type_gonogo_b1)
     random.shuffle(trial_type_gonogo_b2)
 
+    # flatten list of go-nogo
+        
+    trial_type_gonogo_b1 = [val for sublist in trial_type_gonogo_b1 for val in sublist]
+    trial_type_gonogo_b2 = [val for sublist in trial_type_gonogo_b2 for val in sublist]
+
+    # insert breaks halfway through bloc
+    trial_type_gonogo_b1.insert(len(trial_type_gonogo_b1)//2, [BREAK])
+    trial_type_gonogo_b2.insert(len(trial_type_gonogo_b2)//2, [BREAK])
 
     # passive viewing
     #---------------------
@@ -189,57 +194,106 @@ def genTrialList():
 
     random.shuffle(trial_type_pass_view_b1)
     random.shuffle(trial_type_pass_view_b2)
+    
+    # insert breaks halfway through bloc
+    trial_type_pass_view_b1.insert(len(trial_type_pass_view_b1)//2, [BREAK])
+    trial_type_pass_view_b2.insert(len(trial_type_pass_view_b2)//2, [BREAK])
 
-
+    #------------------------------
+    # get full trial list together
+    #------------------------------
+    all_trials_type = []
     
-    #-----------------------------------------
-    # Generate Lists for Inter Stim Intervals
-    #-----------------------------------------    
+    all_trials_type = trial_type_gonogo_b1 + [BREAK] + trial_type_pass_view_b1 + [BREAK] + trial_type_gonogo_b2 + [BREAK] + trial_type_pass_view_b2
     
-    isi_gonogo_1 = random.sample(range(500, 800), len(trial_type_gonogo_b1)) # bloc 1 go nogo
-    isi_gonogo_2 = random.sample(range(500, 800), len(trial_type_gonogo_b2)) # bloc 2 go nogo
-    
-    isi_pass_view_1 = random.sample(range(1500, 3000), len(trial_type_pass_view_b1)) # bloc 1 passive viewing
-    isi_pass_view_2 = random.sample(range(1500, 3000), len(trial_type_pass_view_b2)) # bloc 2 passive viewing
-
-    
+ 
+      
    #--------------------------
    # Assign stim to to trial
-   #--------------------------
-   
-   trig_GO = 101
-   trig_NOGO = 103
-   
-   
-   stim_trial_b1=[]
-   trigger_code_b1=[]
-  
-   for i in range(len(trial_type_gonogo_b1)):
-        if trial_type_gonogo_b1[i] == GO:
-            stim_trial_b1 += [all_go_b1[i]]
-            trigger_code_b1 += [trig_GO]
-        
-        if trial_type_gonogo_b1[i] == NOGO:
-            stim_trial_b1 += [all_nogo_b1[i]]    
-            trigger_code_b1 += [trig_NOGO]
-
-   gng_b1 = {'Stim': stim_trial_b1, 'ISI': isi_gonogo_1, 'Code': trigger_code_b1}
+   #-------------------------- 
+     
+    all_trials=[]
+    all_triggers=[]
+    all_isi = []
+    all_time_pres =[]
     
-   stim_trial_b2=[]
-   trigger_code_b2=[]
+    ind_go = 0
+    ind_nogo = 0
+    ind_hw = 0
+    ind_neg =0
+    ind_neut =0
+    
+    
+    
+    for stim in range(0,len(all_trials_type)):
+        if all_trials_type[stim] == GO:
+            all_trials += [all_go[ind_go]]
+            all_triggers += [trig_GO]
+            all_isi += random.sample(range(500, 800), 1)
+            all_time_pres += [600]
+            ind_go += 1
+            
+        elif all_trials_type[stim] == NOGO:
+            all_trials += [all_nogo[ind_nogo]]
+            all_triggers += [trig_NOGO]
+            all_isi += random.sample(range(500, 800), 1)
+            all_time_pres += [600]
+            ind_nogo += 1 
+            
+        elif all_trials_type[stim] == HW:
+            all_trials += [all_hw[ind_hw]]
+            all_triggers += [trig_HW]
+            all_isi += random.sample(range(1500, 3000), 1)
+            all_time_pres += random.sample(range(1000, 14000), 1)
+            ind_hw += 1 
+            
+        elif all_trials_type[stim] == NEG:
+            all_trials += [all_neg[ind_neg]]
+            all_triggers += [trig_NEG]
+            all_isi += random.sample(range(1500, 3000), 1)
+            all_time_pres += random.sample(range(1000, 14000), 1)
+            ind_neg += 1 
+            
+        elif all_trials_type[stim] == NEUT:
+            all_trials += [all_neut[ind_neut]]
+            all_triggers += [trig_NEUT]
+            all_isi += random.sample(range(1500, 3000), 1)
+            all_time_pres += random.sample(range(1000, 14000), 1)
+            ind_neut += 1 
+            
+        elif all_trials_type[stim] == BREAK:
+            all_trials += ['break']
+            all_triggers += [trig_BREAK]
+            all_isi += ['break']
+            all_time_pres += ['break']
   
-   for i in range(len(trial_type_gonogo_b2)):
-        if trial_type_gonogo_b2[i] == GO:
-            stim_trial_b2 += [all_go_b2[i]]
-            trigger_code_b2 += [trig_GO]
-        
-        if trial_type_gonogo_b2[i] == NOGO:
-            stim_trial_b2 += [all_nogo_b2[i]]    
-            trigger_code_b2 += [trig_NOGO]
-
-   gng_b1 = {'Stim': stim_trial_b2, 'ISI': isi_gonogo_2, 'Code': trigger_code_b2}
+    # go nogo bloc 1
    
+
+    d_trials = {'Stim': all_trials, 'PresTime': all_time_pres, 'ISI': all_isi, 'Trigger': all_triggers}
+    df_trials = pd.DataFrame(d_trials)
+
+    
+    all_trials = []
+    all_triggers = []
+    
+    for bloc in [trial_type_gonogo_b1, trial_type_pass_view_b1, trial_type_gonogo_b2, trial_type_pass_view_b2]:
+        # passive viewing bloc 1
+        for i in range(len(bloc)):
+            if bloc[i] == HW:
+                stim_trial_pv_b1 += [all_hw_b1[i]]
+                trigger_code_pv_b1 += [trig_HW]
+            
+            elif bloc[i] == NEG:
+                stim_trial_pv_b1 += [all_neg_b1[i]]
+                trigger_code_pv_b1 += [trig_NEG]
                 
+            elif bloc[i] == NEUT:
+                stim_trial_pv_b1 += [all_neut_b1[i]]
+                trigger_code_pv_b1 += [trig_NEUT]         
+                
+        pv_b1 = {'Stim': stim_trial_pv_b1, 'ISI': isi_pass_view_b1, 'Code': trigger_code_pv_b1}
+                    
             
 genTrialList()        
     
