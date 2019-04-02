@@ -273,27 +273,7 @@ def genTrialList():
     d_trials = {'Stim': all_trials, 'PresTime': all_time_pres, 'ISI': all_isi, 'Trigger': all_triggers}
     df_trials = pd.DataFrame(d_trials)
 
-    
-    all_trials = []
-    all_triggers = []
-    
-    for bloc in [trial_type_gonogo_b1, trial_type_pass_view_b1, trial_type_gonogo_b2, trial_type_pass_view_b2]:
-        # passive viewing bloc 1
-        for i in range(len(bloc)):
-            if bloc[i] == HW:
-                stim_trial_pv_b1 += [all_hw_b1[i]]
-                trigger_code_pv_b1 += [trig_HW]
-            
-            elif bloc[i] == NEG:
-                stim_trial_pv_b1 += [all_neg_b1[i]]
-                trigger_code_pv_b1 += [trig_NEG]
-                
-            elif bloc[i] == NEUT:
-                stim_trial_pv_b1 += [all_neut_b1[i]]
-                trigger_code_pv_b1 += [trig_NEUT]         
-                
-        pv_b1 = {'Stim': stim_trial_pv_b1, 'ISI': isi_pass_view_b1, 'Code': trigger_code_pv_b1}
-                    
+    df_trials.to_csv('skyline_eeg_all_trials.csv')                     
             
 genTrialList()        
     
