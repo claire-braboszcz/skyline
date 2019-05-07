@@ -16,7 +16,7 @@ import pandas as pd
 #-------------- Parameters -----------------
 
 # enter participant ID
-pp_id = 330
+pp_id = 148
 
 # Enter participant's experimental group, chose from:
 #'Study ID EEG Female'
@@ -24,8 +24,8 @@ pp_id = 330
 #'Study ID Main Male'
 #'Study ID Main Female'
 
-pp_group = 'Study ID EEG Male'
-pp_cond = 'Cond EEG Male'
+pp_group = 'Study ID EEG Female'
+pp_cond = 'Cond EEG Female'
 #---------------------------------------------
 
 
