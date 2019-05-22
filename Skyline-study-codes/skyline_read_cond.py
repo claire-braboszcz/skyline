@@ -16,7 +16,7 @@ import pandas as pd
 #-------------- Parameters -----------------
 
 # enter participant ID
-pp_id = 148
+pp_id = 476
 
 # Enter participant's experimental group, chose from:
 #'Study ID EEG Female'
@@ -24,8 +24,8 @@ pp_id = 148
 #'Study ID Main Male'
 #'Study ID Main Female'
 
-pp_group = 'Study ID EEG Female'
-pp_cond = 'Cond EEG Female'
+pp_group = 'Study ID Main Female'
+pp_cond = 'Cond Main Female'
 #---------------------------------------------
 
 
@@ -38,4 +38,4 @@ cond = pd.read_csv(condfile)
 eeg_m = cond[[pp_group, pp_cond]]
 
 
-eeg_m.loc[eeg_m[pp_group] == pp_id]
+print(eeg_m.loc[eeg_m[pp_group] == pp_id])
