@@ -1,6 +1,8 @@
 ---
 title: "Visualize Skyline participants daily survey responses behaviour"
-output: html_notebook
+output:
+  html_document:
+    df_print: paged
 ---
 
 
