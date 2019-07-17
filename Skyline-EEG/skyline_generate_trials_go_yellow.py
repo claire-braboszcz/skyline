@@ -306,7 +306,7 @@ for stim in range(0,len(all_trials_type)):
 d_trials = {'Stim': all_trials, 'PresTime': all_time_pres, 'ISI': all_isi, 'Trigger': all_triggers}
 df_trials = pd.DataFrame(d_trials)
 
-df_trials.to_csv('skyline_eeg_all_trials_go_yellow_0105.csv', index= False)                     
+df_trials.to_csv('skyline_eeg_all_trials_go_yellow_1107.csv', index= False)                     
         
 
 
