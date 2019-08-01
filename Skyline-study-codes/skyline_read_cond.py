@@ -16,10 +16,7 @@ import pandas as pd
 #-------------- Parameters -----------------
 
 # enter participant ID
-pp_id = 269
-
-
-
+pp_id = 752
 
 # Enter participant's experimental group, chose from:
 #'Study ID EEG Female'
