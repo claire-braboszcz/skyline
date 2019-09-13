@@ -1,0 +1,238 @@
+---
+title: "Skyline Behaviour Results"
+output: html_notebook
+date: 2019-09-11
+---
+
+
+```{r}
+library(tidyverse)
+library(lubridate)
+```
+
+Get performance for daily survey completion
+============================================
+
+1. Read Qualtrics generated csv files
+
+get filepaths
+
+```{r}
+
+day_filepath =  "~/Documents/STUDY/EEG-Tobacco/DATA/SURVEYS/Day/"
+
+evening_filepath = "~/Documents/STUDY/EEG-Tobacco/DATA/SURVEYS/Evening"
+
+eff_evening_filepath = "~/Documents/STUDY/EEG-Tobacco/DATA/SURVEYS/Every3days"
+
+cond_file = "~/Documents/STUDY/EEG-Tobacco/DATA/expe_condition.csv"
+
+
+output_filepath = "~/Documents/STUDY/EEG-Tobacco/DATA/SURVEYS"
+
+
+followup_filepath = "~/Documents/STUDY/EEG-Tobacco/DATA/SURVEYS/FollowUp"
+
+followup_lab_filepath = "~/Documents/STUDY/EEG-Tobacco/DATA/SURVEYS/FollowUp_lab"
+
+
+```
+
+read files
+
+```{r}
+# daily survey eff ctr messages
+
+files_day <-dir(path= day_filepath, pattern = "*.csv") 
+
+data_day <- files_day %>% 
+  map(~ read_csv(file.path(day_filepath, .))) %>%
+  reduce(bind_rows)
+
+
+# daily evening survey
+files_eve <-dir(path= evening_filepath, pattern = "*.csv") 
+
+data_eve <-read.csv(file.path(evening_filepath, files_eve), header = TRUE, sep = ",", dec = ".")
+as_tibble(data_eve)
+
+# every 3 days evening survey
+  
+files_eff_eve <-dir(path= eff_evening_filepath, pattern = "*.csv") 
+
+data_eff <-read.csv(file.path(eff_evening_filepath, files_eff_eve), header = TRUE, sep = ",", dec = ".")
+as_tibble(data_eff)
+    
+
+# condition file
+cond <- read_csv(cond_file)
+as_tibble(cond)
+
+# follow up files for both online and not online pp
+files_followup <-dir(path= followup_filepath, pattern = "*.csv") 
+data_followup<- read.csv(file.path(followup_filepath, files_followup), header = TRUE, sep = ",", dec = ".")
+as_tibble(data_followup)
+
+
+files_followup_lab <-dir(path= followup_lab_filepath, pattern = "*.csv") 
+data_followup_lab<- read.csv(file.path(followup_lab_filepath, files_followup_lab), header = TRUE, sep = ",", dec = ".")
+as_tibble(data_followup_lab)
+
+
+```
+
+rename columns 
+
+```{r}
+data_day <-rename(data_day, date=EndDate, completed=Finished, ID = Q1, score =SC0)
+
+
+data_eve <-rename(data_eve, date=EndDate, completed=Finished, ID = Q1)
+
+data_eff <-rename(data_eff, date=EndDate, completed=Finished, ID = Q1)
+
+cond <-rename(cond, ID = "Subject ID", condition = "Condition = Intervention")
+cond$ID<-as.character(cond$ID)
+
+
+# rename columns of interest and filter to get only the completed = True
+data_followup <-rename(data_followup, date=RecordedDate, completed=Finished, ID = Q1, Interview=Q81)
+data_followup$ID<-factor(data_followup$ID)
+
+data_followup_lab <-rename(data_followup_lab, date=RecordedDate, completed=Finished, ID = Q116)
+data_followup_lab$ID<-factor(data_followup_lab$ID)
+
+
+```
+
+Get the difference between participant enrolled (= have a participant ID) and those who actually conpleted at least 1 survey
+
+```{r}
+# for data_day
+dropout<-anti_join(cond, data_day)
+```
+
+
+
+filter to get only completed survey
+```{r}
+#filter to get only the completed = True
+
+data_day<-data_day %>%filter(completed == 'True')
+data_eve<-data_eve %>%filter(completed == 'True')
+data_eff<-data_eff %>%filter(completed == 'True')
+```
+
+
+2. Arrange data by participants'ID and count how many lines for each (= how many surveys have been completed; 1 line=1 survey)
+
+```{r}
+data_day_tmp<- data_day %>%
+  group_by(ID) %>%
+  tally()
+data_day_tmp <- rename(data_day_tmp, day_msg = n)
+
+
+data_eve_tmp<- data_eve %>%
+  group_by(ID) %>%
+  tally()
+
+data_eve_tmp <- rename(data_eve_tmp, eve_msg = n)
+
+data_eff_tmp<- data_eff %>%
+  group_by(ID) %>%
+  tally()
+  
+data_eff_tmp <- rename(data_eff_tmp, ev3days = n)
+```
+
+
+3. Collate data from all day and evening survey within the same dataframe
+
++ make sure we only look at data from real participant by taking only the IDs present on the condition file
+
+```{r}
+sum_data<- inner_join(cond, data_day_tmp, by = 'ID', copy=TRUE )
+sum_data<-left_join(data_day_tmp,data_eve_tmp, by = 'ID', copy=TRUE)
+sum_data<-left_join(sum_data, data_eff_tmp, by = 'ID', copy=TRUE)
+
+## add information from condition file
+sum_data<-left_join(sum_data, cond, by = 'ID', copy=TRUE)
+
+# get only real participant in followup datasets
+
+sum_data_followup <- inner_join(cond, data_followup, by = 'ID', copy=TRUE )
+
+sum_data_followup_lab <- inner_join(cond, data_followup_lab, by = 'ID', copy=TRUE )
+
+
+```
+
+
+
+4. Overview of performance
+
+Number of participants who completed 80% of daily surveys:
+
+```{r}
+sum(sum_data$day_msg >66)
+```
+
+Number of participants who completed between 50% and 80% of daily surveys:
+
+```{r}
+sum(sum_data$day_msg %in% 41:66)
+
+```
+
+Number of participants who completed less than 50% of daily surveys:
+
+```{r}
+sum(sum_data$day_msg %in% 1:40)
+```
+
+Number of participants who completed online follow up questionnaire:
+
+```{r}
+sum(sum_data_followup$completed == 'True')
+
+```
+
+Number of participants who completed lab based follow up questionnaire:
+```{r}
+sum(sum_data_followup_lab$completed == 'True')
+
+```
+
+
+Number of participants who dropped out from the start (ie. never completed an online survey):
+
+```{r}
+nrow(dropout)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+Get daily self efficacy and response efficacy scores
+=====================================================
+
+Self efficacy and response efficacy measures were collected every 3 days (!! bug in the plateform, question was presented every day for some participants -> need to work out which and take every 3 day measures)
+
+
+
+```{r}
+data_day
+```
+
+
+
+
