@@ -16,11 +16,6 @@ Get daily self efficacy and response efficacy scores
 Efficacy scores were collected in:
 - every 3 days evening questionnaires (!! bug in the plateform, question was presented every day for some participants -> need to work out which and take every 3 day measures)
 
-- questions scoring: 0 = not at all; 100 = very much
-
-- response efficacy: Q3_1, Q3_2
-- self-efficacy : q4_1, q4_2, q4_3
-- hope: q7_1
 
 1.Preprocessing
 
@@ -60,9 +55,21 @@ as_tibble(cond)
 
 rename columns 
 
+- questions scoring: 0 = not at all; 100 = very much
+
+- response efficacy: Q3_1, Q3_2
+- self-efficacy : q4_1, q4_2, q4_3
+- hope: q7_1
+- quit intention: Q5
+
 ```{r}
 
-data_eff <-rename(data_eff, date=EndDate, completed=Finished, ID = Q1)
+data_eff <-rename(data_eff, date=EndDate, completed=Finished, ID = Q1, 
+                  r_eff1 = Q3_1, r_eff2 = Q3_2, 
+                  s_eff1= Q4_1, s_eff2 = Q4_2, s_eff3= Q4_3, 
+                  hope = Q7_1, 
+                  quit_int = Q5
+                  )
 
 cond <-rename(cond, ID = "Subject ID", condition = "Condition = Intervention", removed= "REMOVED")
 cond$ID<-as.factor(cond$ID)
