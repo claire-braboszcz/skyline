@@ -1,5 +1,5 @@
 ---
-title: "Skyline Behaviour Results Efficacy response"
+title: "Skyline Get daily self efficacy and response efficacy scores"
 output: html_notebook
 date: 2019-09-12
 ---
@@ -10,19 +10,15 @@ library(tidyverse)
 library(lubridate)
 ```
 
-Get daily self efficacy and response efficacy scores
+Preprocessing
 =====================================================
 
 Efficacy scores were collected in:
 - every 3 days evening questionnaires (!! bug in the plateform, question was presented every day for some participants -> need to work out which and take every 3 day measures)
 
 
-1.Preprocessing
-
-get filepaths
-
 ```{r}
-
+ #get filepaths
 
 eff_evening_filepath = "~/Documents/STUDY/EEG-Tobacco/DATA/SURVEYS/Every3days"
 
@@ -31,65 +27,72 @@ cond_file = "~/Documents/STUDY/EEG-Tobacco/DATA/expe_condition.csv"
 
 output_filepath = "~/Documents/STUDY/EEG-Tobacco/DATA/SURVEYS"
 
+#read files
 
-```
-
-read files
-
-```{r}
-# every 3 days evening survey
-  
 files_eff_eve <-dir(path= eff_evening_filepath, pattern = "*.csv") 
 
-data_eff <-read.csv(file.path(eff_evening_filepath, files_eff_eve), header = TRUE, sep = ",", dec = ".")
-as_tibble(data_eff)
-    
+data_eff <-read.csv(file.path(eff_evening_filepath, files_eff_eve), header = TRUE, sep = ",", dec = ".", stringsAsFactors = FALSE)
 
 # condition file
 cond <- read_csv(cond_file)
-as_tibble(cond)
 
 
+#rename columns 
+#- questions scoring: 0 = not at all; 100 = very much
 
-```
-
-rename columns 
-
-- questions scoring: 0 = not at all; 100 = very much
-
-- response efficacy: Q3_1, Q3_2
-- self-efficacy : q4_1, q4_2, q4_3
-- hope: q7_1
-- quit intention: Q5
-
-```{r}
-
-data_eff <-rename(data_eff, date=EndDate, completed=Finished, ID = Q1, 
+data_eff <-rename(data_eff, date=EndDate, completed=Finished,
+                  ID = Q1, 
                   r_eff1 = Q3_1, r_eff2 = Q3_2, 
                   s_eff1= Q4_1, s_eff2 = Q4_2, s_eff3= Q4_3, 
                   hope = Q7_1, 
                   quit_int = Q5
                   )
 
+data_eff$ID<-as.factor(data_eff$ID)
+
+
 cond <-rename(cond, ID = "Subject ID", condition = "Condition = Intervention", removed= "REMOVED")
 cond$ID<-as.factor(cond$ID)
 
+# merge cond and eff files to get information about particopants condition
+
+df <- full_join(cond, data_eff)
+df$ID<-as.factor(df$ID)
+# remove un-used dataframes
+rm(cond, data_eff)
+
+
+#Replace missing values and keep only participants who were not removed
+df$removed<-df$removed %>% replace(is.na(.), 0)
+df<-df%>%filter(removed == 0)
+
+#filter to get only completed = True
+df<-df %>%filter(completed == 'True')
+
+
 ```
 
-Replace missing values and keep only participants who were not removed
+ Compute response and self efficacy scores
+ ------------------------------------------
+
 
 ```{r}
-cond$removed<-cond$removed %>% replace(is.na(.), 0)
+# first reduce number of columns to keep only thoe of interest
+df_sml <- select(df, ID, condition, date, r_eff1:quit_int )
 
-cond <-cond%>%filter(removed == 0)
+df_sml<-df_sml %>% mutate_each(funs(as.numeric), -ID, -quit_int, -date) 
 
+ mutate(df_sml, 
+       RE_score = ave(df_sml$r_eff1, df_sml$r_eff2))
+
+df_sml<- df_sml %>%
+  group_by(ID) %>%
+  mutate(df_sml, 
+       RE_score = ave(df_sml$r_eff1, df_sml$r_eff2))
 ```
 
-filter to get only completed survey
-```{r}
-#filter to get only the completed = True
-data_eff<-data_eff %>%filter(completed == 'True')
-```
+
+
 
 
 Arrange data by participants'ID 
