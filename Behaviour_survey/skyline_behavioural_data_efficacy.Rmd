@@ -75,38 +75,80 @@ df<-df %>%filter(completed == 'True')
  Compute response and self efficacy scores
  ------------------------------------------
 
+-> get the mean of all individual scores in each condition for each day
+  - 1. define days 1-2-3 etc.. 
+  - 2. count how many of each day per condition
+
 
 ```{r}
-# first reduce number of columns to keep only thoe of interest
-df_sml <- select(df, ID, condition, date, r_eff1:quit_int )
+# first reduce number of columns to keep only those of interest
+df <- select(df, ID, condition, date, r_eff1:quit_int )
 
-df_sml<-df_sml %>% mutate_each(funs(as.numeric), -ID, -quit_int, -date) 
+# transform the columns for response and self efficacy that were charactuers in numeric tyoe           
+df <-df %>% mutate_each(funs(as.numeric), -ID, -quit_int, -date) 
 
- mutate(df_sml, 
-       RE_score = ave(df_sml$r_eff1, df_sml$r_eff2))
+# add a counter for each row per ID (see 1.)
+df <- df %>% 
+  group_by(ID) %>% 
+  mutate(n_day = row_number()) %>% 
+  select(ID, condition, n_day, everything())
 
-df_sml<- df_sml %>%
-  group_by(ID) %>%
-  mutate(df_sml, 
-       RE_score = ave(df_sml$r_eff1, df_sml$r_eff2))
+df$n_day<-as.factor(df$n_day)
+df$condition <- as.factor(df$condition)
+
+# count how many of each day per condition
+# _> need to get summary per condition per day not repetition
+
+n_rep <- df %>% group_by(condition, n_day) %>%
+ summarize(count=n())
+
+n_rep <-n_rep %>% drop_na()
+
+# plot
+ggplot(data= n_rep, aes(x = n_day, y=count)) +
+  geom_point(mapping = aes(colour = condition) ) +
+  ggtitle("Number of response per day - efficacy questionnaire")
+
+
+ 
+
+
 ```
 
+- 3. Compute mean response and self efficacy score for each day for each pp
+
+- 4. plot
+!!! different number of data points per paricipant !!!
 
 
-
-
-Arrange data by participants'ID 
 
 ```{r}
+# compute total score for re and se for each day and each participant
 
-data_eff_tmp<- data_eff %>%  group_by(ID) 
-%>%
-  tally()
-  
-data_eff_tmp <- rename(data_eff_tmp, ev3days = n)
+df <- df %>% group_by(ID, n_day) %>% 
+  mutate(total_re= sum(r_eff1, r_eff2), 
+         total_se= sum(s_eff1, s_eff2, s_eff3)
+         )
+
+# drop rows with NA
+
+# compute mean totol of response and self efficacy score for each day for each condition
+m_scores <- df %>% group_by(condition, n_day) %>% 
+  summarize(mean_re= mean(total_re,na.rm=TRUE), 
+            mean_se=mean(total_se, na.rm=TRUE))
+
+m_scores <- left_join(m_scores, n_rep)
+
+# plot on 2 different graph response efficacy and self efficacy
+m_scores %>% gather("type", "score", 3:4 ) %>% 
+  ggplot(data=., mapping=aes(x= n_day, y=score)) +
+         geom_point(mapping = aes(colour=condition, size=count), alpha=1/3)+
+        facet_wrap(~type)+
+  geom_smooth(se=FALSE)+
+  ggtitle("Mean scores for response and self efficacy per day per condition")
+
+
 ```
-
-
 
 
 
