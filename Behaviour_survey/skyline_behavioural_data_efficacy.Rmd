@@ -154,19 +154,19 @@ ggplot(data= n_rep, aes(x = n_day, y=count)) +
 
 
 ```{r}
-# compute total score for re and se for each day and each participant
+# compute total score for each measure for each day and each participant
 
 df9 <- df9 %>% group_by(ID, n_day) %>% 
   mutate(total_re= sum(r_eff1, r_eff2), 
          total_se= sum(s_eff1, s_eff2, s_eff3)
          )
 
-# drop rows with NA
 
 # compute mean totol of response and self efficacy score for each day for each condition
 m_scores <- df9 %>% group_by(condition, n_day) %>% 
   summarize(mean_re= mean(total_re,na.rm=TRUE), 
-            mean_se=mean(total_se, na.rm=TRUE))
+            mean_se=mean(total_se, na.rm=TRUE), 
+            mean_hope = mean(hope, na.rm=TRUE))
 
 m_scores <- left_join(m_scores, n_rep)
 
@@ -178,12 +178,26 @@ m_scores %>% gather("type", "score", 3:4 ) %>%
   geom_smooth(se=FALSE)+
   ggtitle("Mean scores for response and self efficacy per day per condition")
 
+# plot hope
+
+ggplot(data=m_scores, mapping=aes(x= n_day, y=mean_hope)) +
+       geom_point(mapping = aes(colour=condition, size=count), alpha=1/3)+
+      geom_smooth(se=FALSE)+
+ggtitle("Mean scores for how hopeful about smoking")
+
+
 
 ```
 
 
 Next step: assess hope + intention to quit
 
+```{r}
+
+
+
+
+```
 
 
 
