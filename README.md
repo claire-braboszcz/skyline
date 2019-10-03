@@ -1,6 +1,6 @@
-# skyline
+This is the code for data analysis of the Skyline study.
+
+- R code for behaviour/survey data
+- pyton code for EEG
 
 
-Raincloud plots in python of some of skyline's pilot data
-
-https://github.com/RainCloudPlots/RainCloudPlots 
