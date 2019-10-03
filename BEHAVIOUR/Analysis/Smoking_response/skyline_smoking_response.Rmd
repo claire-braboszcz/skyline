@@ -9,13 +9,13 @@ library(here)
 
 
 
-fpath = here("RespSmokingWarning")
+fpath = here("data")
 cond_file = "~/Documents/STUDY/EEG-Tobacco/DATA/expe_condition.csv"
 save_figure = here("Figures")
 
 #read files
 
-files <-dir(path=fpath , pattern = "*.csv") 
+files <-dir(path=fpath, pattern = "*.csv") 
 
 data_smok_resp <-read.csv(file.path(fpath, files), header = TRUE, sep = ",", dec = ".", stringsAsFactors = FALSE)
 

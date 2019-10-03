@@ -1764,31 +1764,37 @@ $(document).ready(function () {
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeSh0aWR5dmVyc2UpXG5saWJyYXJ5KGhlcmUpXG5cblxuXG5mcGF0aCA9IGhlcmUoXCJSZXNwU21va2luZ1dhcm5pbmdcIilcbmNvbmRfZmlsZSA9IFwifi9Eb2N1bWVudHMvU1RVRFkvRUVHLVRvYmFjY28vREFUQS9leHBlX2NvbmRpdGlvbi5jc3ZcIlxuc2F2ZV9maWd1cmUgPSBoZXJlKFwiRmlndXJlc1wiKVxuXG4jcmVhZCBmaWxlc1xuXG5maWxlcyA8LWRpcihwYXRoPWZwYXRoICwgcGF0dGVybiA9IFwiKi5jc3ZcIikgXG5cbmRhdGFfc21va19yZXNwIDwtcmVhZC5jc3YoZmlsZS5wYXRoKGZwYXRoLCBmaWxlcyksIGhlYWRlciA9IFRSVUUsIHNlcCA9IFwiLFwiLCBkZWMgPSBcIi5cIiwgc3RyaW5nc0FzRmFjdG9ycyA9IEZBTFNFKVxuXG4jIGNvbmRpdGlvbiBmaWxlXG5jb25kIDwtIHJlYWRfY3N2KGNvbmRfZmlsZSlcblxuYGBgIn0= -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeSh0aWR5dmVyc2UpXG5saWJyYXJ5KGhlcmUpXG5mcGF0aCA9IGhlcmUoXCJkYXRhXCIpXG5jb25kX2ZpbGUgPSBcIn4vRG9jdW1lbnRzL1NUVURZL0VFRy1Ub2JhY2NvL0RBVEEvZXhwZV9jb25kaXRpb24uY3N2XCJcbnNhdmVfZmlndXJlID0gaGVyZShcIkZpZ3VyZXNcIilcbiNyZWFkIGZpbGVzXG5maWxlcyA8LWRpcihwYXRoPWZwYXRoLCBwYXR0ZXJuID0gXCIqLmNzdlwiKSBcbmRhdGFfc21va19yZXNwIDwtcmVhZC5jc3YoZmlsZS5wYXRoKGZwYXRoLCBmaWxlcyksIGhlYWRlciA9IFRSVUUsIHNlcCA9IFwiLFwiLCBkZWMgPSBcIi5cIiwgc3RyaW5nc0FzRmFjdG9ycyA9IEZBTFNFKVxuIyBjb25kaXRpb24gZmlsZVxuY29uZCA8LSByZWFkX2Nzdihjb25kX2ZpbGUpXG5gYGAifQ== -->
 <pre class="r"><code>library(tidyverse)
 library(here)
-
-
-
-fpath = here(&quot;RespSmokingWarning&quot;)
+fpath = here(&quot;data&quot;)
 cond_file = &quot;~/Documents/STUDY/EEG-Tobacco/DATA/expe_condition.csv&quot;
 save_figure = here(&quot;Figures&quot;)
-
 #read files
-
-files &lt;-dir(path=fpath , pattern = &quot;*.csv&quot;) 
-
+files &lt;-dir(path=fpath, pattern = &quot;*.csv&quot;) 
 data_smok_resp &lt;-read.csv(file.path(fpath, files), header = TRUE, sep = &quot;,&quot;, dec = &quot;.&quot;, stringsAsFactors = FALSE)
-
 # condition file
-cond &lt;- read_csv(cond_file)
-</code></pre>
+cond &lt;- read_csv(cond_file)</code></pre>
 <!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiUGFyc2VkIHdpdGggY29sdW1uIHNwZWNpZmljYXRpb246XG5jb2xzKFxuICBgU3ViamVjdCBJRGAgPSBcdTAwMWJbMzFtY29sX2NoYXJhY3RlcigpXHUwMDFiWzM5bSxcbiAgYFN0YXJ0aW5nIERhdGVgID0gXHUwMDFiWzMxbWNvbF9jaGFyYWN0ZXIoKVx1MDAxYlszOW0sXG4gIGBDb25kaXRpb24gPSBJbnRlcnZlbnRpb25gID0gXHUwMDFiWzMybWNvbF9kb3VibGUoKVx1MDAxYlszOW0sXG4gIEVFRyA9IFx1MDAxYlszMm1jb2xfZG91YmxlKClcdTAwMWJbMzltLFxuICBGaW5pc2hlZCA9IFx1MDAxYlszMm1jb2xfZG91YmxlKClcdTAwMWJbMzltLFxuICBSRU1PVkVEID0gXHUwMDFiWzMybWNvbF9kb3VibGUoKVx1MDAxYlszOW0sXG4gIE5vdGVzID0gXHUwMDFiWzMxbWNvbF9jaGFyYWN0ZXIoKVx1MDAxYlszOW0sXG4gIGBObyBDb21wbGlhbmNlYCA9IFx1MDAxYlszMm1jb2xfZG91YmxlKClcdTAwMWJbMzltLFxuICBgRW1haWwgcmVtaW5kZXIgcG9vciBwZXJmYCA9IFx1MDAxYlszMW1jb2xfY2hhcmFjdGVyKClcdTAwMWJbMzltXG4pXG4ifQ== -->
+<pre><code>Parsed with column specification:
+cols(
+  `Subject ID` = [31mcol_character()[39m,
+  `Starting Date` = [31mcol_character()[39m,
+  `Condition = Intervention` = [32mcol_double()[39m,
+  EEG = [32mcol_double()[39m,
+  Finished = [32mcol_double()[39m,
+  REMOVED = [32mcol_double()[39m,
+  Notes = [31mcol_character()[39m,
+  `No Compliance` = [32mcol_double()[39m,
+  `Email reminder poor perf` = [31mcol_character()[39m
+)</code></pre>
+<!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 
-<div id="rmd-source-code">LS0tCnRpdGxlOiAiU2t5bGluZSBTdXJ2ZXkgZGF0YSBhbmFseXNpcyBSZXNwb25zZSB0byBzbW9raW5nIGhlYWx0aCB3YXJuaW5ncyBhdCBiYXNlbGluZSBhbmQgZm9sbG93IHVwICIKb3V0cHV0OiBodG1sX25vdGVib29rCi0tLQoKYGBge3J9CmxpYnJhcnkodGlkeXZlcnNlKQpsaWJyYXJ5KGhlcmUpCgoKCmZwYXRoID0gaGVyZSgiUmVzcFNtb2tpbmdXYXJuaW5nIikKY29uZF9maWxlID0gIn4vRG9jdW1lbnRzL1NUVURZL0VFRy1Ub2JhY2NvL0RBVEEvZXhwZV9jb25kaXRpb24uY3N2IgpzYXZlX2ZpZ3VyZSA9IGhlcmUoIkZpZ3VyZXMiKQoKI3JlYWQgZmlsZXMKCmZpbGVzIDwtZGlyKHBhdGg9ZnBhdGggLCBwYXR0ZXJuID0gIiouY3N2IikgCgpkYXRhX3Ntb2tfcmVzcCA8LXJlYWQuY3N2KGZpbGUucGF0aChmcGF0aCwgZmlsZXMpLCBoZWFkZXIgPSBUUlVFLCBzZXAgPSAiLCIsIGRlYyA9ICIuIiwgc3RyaW5nc0FzRmFjdG9ycyA9IEZBTFNFKQoKIyBjb25kaXRpb24gZmlsZQpjb25kIDwtIHJlYWRfY3N2KGNvbmRfZmlsZSkKCmBgYAoK</div>
+<div id="rmd-source-code">LS0tCnRpdGxlOiAiU2t5bGluZSBTdXJ2ZXkgZGF0YSBhbmFseXNpcyBSZXNwb25zZSB0byBzbW9raW5nIGhlYWx0aCB3YXJuaW5ncyBhdCBiYXNlbGluZSBhbmQgZm9sbG93IHVwICIKb3V0cHV0OiBodG1sX25vdGVib29rCi0tLQoKYGBge3J9CmxpYnJhcnkodGlkeXZlcnNlKQpsaWJyYXJ5KGhlcmUpCgoKCmZwYXRoID0gaGVyZSgiZGF0YSIpCmNvbmRfZmlsZSA9ICJ+L0RvY3VtZW50cy9TVFVEWS9FRUctVG9iYWNjby9EQVRBL2V4cGVfY29uZGl0aW9uLmNzdiIKc2F2ZV9maWd1cmUgPSBoZXJlKCJGaWd1cmVzIikKCiNyZWFkIGZpbGVzCgpmaWxlcyA8LWRpcihwYXRoPWZwYXRoLCBwYXR0ZXJuID0gIiouY3N2IikgCgpkYXRhX3Ntb2tfcmVzcCA8LXJlYWQuY3N2KGZpbGUucGF0aChmcGF0aCwgZmlsZXMpLCBoZWFkZXIgPSBUUlVFLCBzZXAgPSAiLCIsIGRlYyA9ICIuIiwgc3RyaW5nc0FzRmFjdG9ycyA9IEZBTFNFKQoKIyBjb25kaXRpb24gZmlsZQpjb25kIDwtIHJlYWRfY3N2KGNvbmRfZmlsZSkKCmBgYAoK</div>
 
 
 
