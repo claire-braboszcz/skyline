@@ -1,0 +1,26 @@
+---
+title: "Skyline Survey data analysis Response to smoking health warnings at baseline and follow up "
+output: html_notebook
+---
+
+```{r}
+library(tidyverse)
+library(here)
+
+
+
+fpath = here("RespSmokingWarning")
+cond_file = "~/Documents/STUDY/EEG-Tobacco/DATA/expe_condition.csv"
+save_figure = here("Figures")
+
+#read files
+
+files <-dir(path=fpath , pattern = "*.csv") 
+
+data_smok_resp <-read.csv(file.path(fpath, files), header = TRUE, sep = ",", dec = ".", stringsAsFactors = FALSE)
+
+# condition file
+cond <- read_csv(cond_file)
+
+```
+
