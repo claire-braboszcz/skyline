@@ -24,3 +24,57 @@ cond <- read_csv(cond_file)
 
 ```
 
+Rename columns
+
+Neg_disgust = Q10_1, Q19_1, Q25_1, Q31_1, Q37_1, Q43_1
+Neg_scared = Q10_2, Q19_2, Q25_2, Q31_2, Q37_2, Q43_2
+Neg_regret = Q10_3, Q19_3, Q25_3, Q31_3, Q37_3, Q43_3
+Believe = Q13_1, Q20_1, Q26_1, Q32_1, Q38_1, Q44_1
+Harm = Q13_2, Q20_2, Q26_2, Q32_2, Q38_2, Q44_2
+Effect_discourage=Q13_3, Q20_3, Q26_3, Q32_2, Q38_3, Q44_3 
+Effect_unpleasant= Q13_4, Q20_4, Q26_4, Q32_4, Q38_4, Q44_4
+Effect_concern = Q13_5, Q20_5, Q26_5, Q32_5, Q38_5, Q44_5
+React_manip = Q14_1, Q21_1, Q22_1, Q33_1, Q39_1, Q45_1  
+React_overblow = Q14_2, Q21_2, Q27_2, Q33_2, Q39_2, Q45_2
+React_annoy = Q14_3, Q21_3, Q27_3, Q33_3, Q39_3, Q45_3
+Avoid_think= Q15_1, Q22_1, Q28_1, Q34_1, Q40_1, Q46_1 
+Avoid_look = Q15_2, Q22_2, Q28_2, Q34_2, Q40_2, Q46_2
+Avoid_sight = Q15_3, Q22_3, Q28_3, Q34_3, Q40_3, Q46_3
+
+
+
+```{r}
+
+data_smok_resp <-rename(data_smok_resp, date=EndDate, completed=Finished,
+                  ID = Q1, 
+                  Quit_int = Q3, 
+                  Like_harm = Q4_1,
+                  Severity_harm = Q7_1
+                    )
+
+# Next: create new columns with total warning resp scores
+
+
+
+```
+
+
+
+
+Do a check of for missing values in the data
+
+```{r}
+
+missing.values <- df %>%
+    gather(key = "key", value = "val") %>%
+    mutate(is.missing = is.na(val)) %>%
+    group_by(key, is.missing) %>%
+    summarise(num.missing = n()) %>%
+    filter(is.missing==T) %>%
+    select(-is.missing) %>%
+    arrange(desc(num.missing)) 
+
+
+```
+
+

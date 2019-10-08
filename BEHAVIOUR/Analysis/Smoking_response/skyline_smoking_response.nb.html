@@ -1764,10 +1764,28 @@ $(document).ready(function () {
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeSh0aWR5dmVyc2UpXG5saWJyYXJ5KGhlcmUpXG5mcGF0aCA9IGhlcmUoXCJkYXRhXCIpXG5jb25kX2ZpbGUgPSBcIn4vRG9jdW1lbnRzL1NUVURZL0VFRy1Ub2JhY2NvL0RBVEEvZXhwZV9jb25kaXRpb24uY3N2XCJcbnNhdmVfZmlndXJlID0gaGVyZShcIkZpZ3VyZXNcIilcbiNyZWFkIGZpbGVzXG5maWxlcyA8LWRpcihwYXRoPWZwYXRoLCBwYXR0ZXJuID0gXCIqLmNzdlwiKSBcbmRhdGFfc21va19yZXNwIDwtcmVhZC5jc3YoZmlsZS5wYXRoKGZwYXRoLCBmaWxlcyksIGhlYWRlciA9IFRSVUUsIHNlcCA9IFwiLFwiLCBkZWMgPSBcIi5cIiwgc3RyaW5nc0FzRmFjdG9ycyA9IEZBTFNFKVxuIyBjb25kaXRpb24gZmlsZVxuY29uZCA8LSByZWFkX2Nzdihjb25kX2ZpbGUpXG5gYGAifQ== -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeSh0aWR5dmVyc2UpXG5cbmBgYCJ9 -->
 <pre class="r"><code>library(tidyverse)
-library(here)
-fpath = here(&quot;data&quot;)
+</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiXHUwMDFiWzM3beKUgOKUgCBcdTAwMWJbMW1BdHRhY2hpbmcgcGFja2FnZXNcdTAwMWJbMjJtIOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgCB0aWR5dmVyc2UgMS4yLjEg4pSA4pSAXHUwMDFiWzM5bVxuXHUwMDFiWzM3bVx1MDAxYlszMm3inJRcdTAwMWJbMzdtIFx1MDAxYlszNG1nZ3Bsb3QyXHUwMDFiWzM3bSAzLjEuMCAgICAgXHUwMDFiWzMybeKclFx1MDAxYlszN20gXHUwMDFiWzM0bXB1cnJyICBcdTAwMWJbMzdtIDAuMy4wXG5cdTAwMWJbMzJt4pyUXHUwMDFiWzM3bSBcdTAwMWJbMzRtdGliYmxlIFx1MDAxYlszN20gMi4wLjEgICAgIFx1MDAxYlszMm3inJRcdTAwMWJbMzdtIFx1MDAxYlszNG1kcGx5ciAgXHUwMDFiWzM3bSAwLjcuOFxuXHUwMDFiWzMybeKclFx1MDAxYlszN20gXHUwMDFiWzM0bXRpZHlyICBcdTAwMWJbMzdtIDAuOC4zICAgICBcdTAwMWJbMzJt4pyUXHUwMDFiWzM3bSBcdTAwMWJbMzRtc3RyaW5nclx1MDAxYlszN20gMS40LjBcblx1MDAxYlszMm3inJRcdTAwMWJbMzdtIFx1MDAxYlszNG1yZWFkciAgXHUwMDFiWzM3bSAxLjMuMSAgICAgXHUwMDFiWzMybeKclFx1MDAxYlszN20gXHUwMDFiWzM0bWZvcmNhdHNcdTAwMWJbMzdtIDAuMy4wXHUwMDFiWzM5bVxuXHUwMDFiWzM3beKUgOKUgCBcdTAwMWJbMW1Db25mbGljdHNcdTAwMWJbMjJtIOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgCB0aWR5dmVyc2VfY29uZmxpY3RzKCkg4pSA4pSAXG5cdTAwMWJbMzFt4pyWXHUwMDFiWzM3bSBcdTAwMWJbMzRtZHBseXJcdTAwMWJbMzdtOjpcdTAwMWJbMzJtZmlsdGVyKClcdTAwMWJbMzdtIG1hc2tzIFx1MDAxYlszNG1zdGF0c1x1MDAxYlszN206OmZpbHRlcigpXG5cdTAwMWJbMzFt4pyWXHUwMDFiWzM3bSBcdTAwMWJbMzRtZHBseXJcdTAwMWJbMzdtOjpcdTAwMWJbMzJtbGFnKClcdTAwMWJbMzdtICAgIG1hc2tzIFx1MDAxYlszNG1zdGF0c1x1MDAxYlszN206OmxhZygpXHUwMDFiWzM5bVxuIn0= -->
+<pre><code>[37m── [1mAttaching packages[22m ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── tidyverse 1.2.1 ──[39m
+[37m[32m✔[37m [34mggplot2[37m 3.1.0     [32m✔[37m [34mpurrr  [37m 0.3.0
+[32m✔[37m [34mtibble [37m 2.0.1     [32m✔[37m [34mdplyr  [37m 0.7.8
+[32m✔[37m [34mtidyr  [37m 0.8.3     [32m✔[37m [34mstringr[37m 1.4.0
+[32m✔[37m [34mreadr  [37m 1.3.1     [32m✔[37m [34mforcats[37m 0.3.0[39m
+[37m── [1mConflicts[22m ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
+[31m✖[37m [34mdplyr[37m::[32mfilter()[37m masks [34mstats[37m::filter()
+[31m✖[37m [34mdplyr[37m::[32mlag()[37m    masks [34mstats[37m::lag()[39m</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeShoZXJlKVxuYGBgIn0= -->
+<pre class="r"><code>library(here)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiaGVyZSgpIHN0YXJ0cyBhdCAvaG9tZS9jbGFpcmUvRG9jdW1lbnRzL3NjcmlwdHMtbG9jYWwvc2t5bGluZS9CRUhBVklPVVIvQW5hbHlzaXMvU21va2luZ19yZXNwb25zZVxuIn0= -->
+<pre><code>here() starts at /home/claire/Documents/scripts-local/skyline/BEHAVIOUR/Analysis/Smoking_response</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZnBhdGggPSBoZXJlKFwiZGF0YVwiKVxuY29uZF9maWxlID0gXCJ+L0RvY3VtZW50cy9TVFVEWS9FRUctVG9iYWNjby9EQVRBL2V4cGVfY29uZGl0aW9uLmNzdlwiXG5zYXZlX2ZpZ3VyZSA9IGhlcmUoXCJGaWd1cmVzXCIpXG4jcmVhZCBmaWxlc1xuZmlsZXMgPC1kaXIocGF0aD1mcGF0aCwgcGF0dGVybiA9IFwiKi5jc3ZcIikgXG5kYXRhX3Ntb2tfcmVzcCA8LXJlYWQuY3N2KGZpbGUucGF0aChmcGF0aCwgZmlsZXMpLCBoZWFkZXIgPSBUUlVFLCBzZXAgPSBcIixcIiwgZGVjID0gXCIuXCIsIHN0cmluZ3NBc0ZhY3RvcnMgPSBGQUxTRSlcbiMgY29uZGl0aW9uIGZpbGVcbmNvbmQgPC0gcmVhZF9jc3YoY29uZF9maWxlKVxuYGBgIn0= -->
+<pre class="r"><code>fpath = here(&quot;data&quot;)
 cond_file = &quot;~/Documents/STUDY/EEG-Tobacco/DATA/expe_condition.csv&quot;
 save_figure = here(&quot;Figures&quot;)
 #read files
@@ -1792,9 +1810,48 @@ cols(
 <!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
+<p>Rename columns</p>
+<p>Neg_disgust = Q10_1, Q19_1, Q25_1, Q31_1, Q37_1, Q43_1 Neg_scared = Q10_2, Q19_2, Q25_2, Q31_2, Q37_2, Q43_2 Neg_regret = Q10_3, Q19_3, Q25_3, Q31_3, Q37_3, Q43_3 Believe = Q13_1, Q20_1, Q26_1, Q32_1, Q38_1, Q44_1 Harm = Q13_2, Q20_2, Q26_2, Q32_2, Q38_2, Q44_2 Effect_discourage=Q13_3, Q20_3, Q26_3, Q32_2, Q38_3, Q44_3 Effect_unpleasant= Q13_4, Q20_4, Q26_4, Q32_4, Q38_4, Q44_4 Effect_concern = Q13_5, Q20_5, Q26_5, Q32_5, Q38_5, Q44_5 React_manip = Q14_1, Q21_1, Q22_1, Q33_1, Q39_1, Q45_1<br />
+React_overblow = Q14_2, Q21_2, Q27_2, Q33_2, Q39_2, Q45_2 React_annoy = Q14_3, Q21_3, Q27_3, Q33_3, Q39_3, Q45_3 Avoid_think= Q15_1, Q22_1, Q28_1, Q34_1, Q40_1, Q46_1 Avoid_look = Q15_2, Q22_2, Q28_2, Q34_2, Q40_2, Q46_2 Avoid_sight = Q15_3, Q22_3, Q28_3, Q34_3, Q40_3, Q46_3</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuXG5kYXRhX3Ntb2tfcmVzcCA8LXJlbmFtZShkYXRhX3Ntb2tfcmVzcCwgZGF0ZT1FbmREYXRlLCBjb21wbGV0ZWQ9RmluaXNoZWQsXG4gICAgICAgICAgICAgICAgICBJRCA9IFExLCBcbiAgICAgICAgICAgICAgICAgIFF1aXRfaW50ID0gUTMsIFxuICAgICAgICAgICAgICAgICAgTGlrZV9oYXJtID0gUTRfMSxcbiAgICAgICAgICAgICAgICAgIFNldmVyaXR5X2hhcm0gPSBRN18xXG4gICAgICAgICAgICAgICAgICAgIClcblxuIyBOZXh0OiBjcmVhdGUgbmV3IGNvbHVtbnMgd2l0aCB0b3RhbCB3YXJuaW5nIHJlc3Agc2NvcmVzXG5cblxuXG5gYGAifQ== -->
+<pre class="r"><code>
+data_smok_resp &lt;-rename(data_smok_resp, date=EndDate, completed=Finished,
+                  ID = Q1, 
+                  Quit_int = Q3, 
+                  Like_harm = Q4_1,
+                  Severity_harm = Q7_1
+                    )
+
+# Next: create new columns with total warning resp scores
+</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>Do a check of for missing values in the data</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubWlzc2luZy52YWx1ZXMgPC0gZGYgJT4lXG4gICAgZ2F0aGVyKGtleSA9IFwia2V5XCIsIHZhbHVlID0gXCJ2YWxcIikgJT4lXG4gICAgbXV0YXRlKGlzLm1pc3NpbmcgPSBpcy5uYSh2YWwpKSAlPiVcbiAgICBncm91cF9ieShrZXksIGlzLm1pc3NpbmcpICU+JVxuICAgIHN1bW1hcmlzZShudW0ubWlzc2luZyA9IG4oKSkgJT4lXG4gICAgZmlsdGVyKGlzLm1pc3Npbmc9PVQpICU+JVxuICAgIHNlbGVjdCgtaXMubWlzc2luZykgJT4lXG4gICAgYXJyYW5nZShkZXNjKG51bS5taXNzaW5nKSkgXG5cbmBgYCJ9 -->
+<pre class="r"><code>missing.values &lt;- df %&gt;%
+    gather(key = &quot;key&quot;, value = &quot;val&quot;) %&gt;%
+    mutate(is.missing = is.na(val)) %&gt;%
+    group_by(key, is.missing) %&gt;%
+    summarise(num.missing = n()) %&gt;%
+    filter(is.missing==T) %&gt;%
+    select(-is.missing) %&gt;%
+    arrange(desc(num.missing)) 
+</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiRXJyb3IgaW4gVXNlTWV0aG9kKFwiZ2F0aGVyX1wiKSA6IFxuICBubyBhcHBsaWNhYmxlIG1ldGhvZCBmb3IgJ2dhdGhlcl8nIGFwcGxpZWQgdG8gYW4gb2JqZWN0IG9mIGNsYXNzIFwiZnVuY3Rpb25cIlxuIn0= -->
+<pre><code>Error in UseMethod(&quot;gather_&quot;) : 
+  no applicable method for 'gather_' applied to an object of class &quot;function&quot;</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 
-<div id="rmd-source-code">LS0tCnRpdGxlOiAiU2t5bGluZSBTdXJ2ZXkgZGF0YSBhbmFseXNpcyBSZXNwb25zZSB0byBzbW9raW5nIGhlYWx0aCB3YXJuaW5ncyBhdCBiYXNlbGluZSBhbmQgZm9sbG93IHVwICIKb3V0cHV0OiBodG1sX25vdGVib29rCi0tLQoKYGBge3J9CmxpYnJhcnkodGlkeXZlcnNlKQpsaWJyYXJ5KGhlcmUpCgoKCmZwYXRoID0gaGVyZSgiZGF0YSIpCmNvbmRfZmlsZSA9ICJ+L0RvY3VtZW50cy9TVFVEWS9FRUctVG9iYWNjby9EQVRBL2V4cGVfY29uZGl0aW9uLmNzdiIKc2F2ZV9maWd1cmUgPSBoZXJlKCJGaWd1cmVzIikKCiNyZWFkIGZpbGVzCgpmaWxlcyA8LWRpcihwYXRoPWZwYXRoLCBwYXR0ZXJuID0gIiouY3N2IikgCgpkYXRhX3Ntb2tfcmVzcCA8LXJlYWQuY3N2KGZpbGUucGF0aChmcGF0aCwgZmlsZXMpLCBoZWFkZXIgPSBUUlVFLCBzZXAgPSAiLCIsIGRlYyA9ICIuIiwgc3RyaW5nc0FzRmFjdG9ycyA9IEZBTFNFKQoKIyBjb25kaXRpb24gZmlsZQpjb25kIDwtIHJlYWRfY3N2KGNvbmRfZmlsZSkKCmBgYAoK</div>
+<div id="rmd-source-code">LS0tCnRpdGxlOiAiU2t5bGluZSBTdXJ2ZXkgZGF0YSBhbmFseXNpcyBSZXNwb25zZSB0byBzbW9raW5nIGhlYWx0aCB3YXJuaW5ncyBhdCBiYXNlbGluZSBhbmQgZm9sbG93IHVwICIKb3V0cHV0OiBodG1sX25vdGVib29rCi0tLQoKYGBge3J9CmxpYnJhcnkodGlkeXZlcnNlKQpsaWJyYXJ5KGhlcmUpCgoKCmZwYXRoID0gaGVyZSgiZGF0YSIpCmNvbmRfZmlsZSA9ICJ+L0RvY3VtZW50cy9TVFVEWS9FRUctVG9iYWNjby9EQVRBL2V4cGVfY29uZGl0aW9uLmNzdiIKc2F2ZV9maWd1cmUgPSBoZXJlKCJGaWd1cmVzIikKCiNyZWFkIGZpbGVzCgpmaWxlcyA8LWRpcihwYXRoPWZwYXRoLCBwYXR0ZXJuID0gIiouY3N2IikgCgpkYXRhX3Ntb2tfcmVzcCA8LXJlYWQuY3N2KGZpbGUucGF0aChmcGF0aCwgZmlsZXMpLCBoZWFkZXIgPSBUUlVFLCBzZXAgPSAiLCIsIGRlYyA9ICIuIiwgc3RyaW5nc0FzRmFjdG9ycyA9IEZBTFNFKQoKIyBjb25kaXRpb24gZmlsZQpjb25kIDwtIHJlYWRfY3N2KGNvbmRfZmlsZSkKCmBgYAoKUmVuYW1lIGNvbHVtbnMKCk5lZ19kaXNndXN0ID0gUTEwXzEsIFExOV8xLCBRMjVfMSwgUTMxXzEsIFEzN18xLCBRNDNfMQpOZWdfc2NhcmVkID0gUTEwXzIsIFExOV8yLCBRMjVfMiwgUTMxXzIsIFEzN18yLCBRNDNfMgpOZWdfcmVncmV0ID0gUTEwXzMsIFExOV8zLCBRMjVfMywgUTMxXzMsIFEzN18zLCBRNDNfMwpCZWxpZXZlID0gUTEzXzEsIFEyMF8xLCBRMjZfMSwgUTMyXzEsIFEzOF8xLCBRNDRfMQpIYXJtID0gUTEzXzIsIFEyMF8yLCBRMjZfMiwgUTMyXzIsIFEzOF8yLCBRNDRfMgpFZmZlY3RfZGlzY291cmFnZT1RMTNfMywgUTIwXzMsIFEyNl8zLCBRMzJfMiwgUTM4XzMsIFE0NF8zIApFZmZlY3RfdW5wbGVhc2FudD0gUTEzXzQsIFEyMF80LCBRMjZfNCwgUTMyXzQsIFEzOF80LCBRNDRfNApFZmZlY3RfY29uY2VybiA9IFExM181LCBRMjBfNSwgUTI2XzUsIFEzMl81LCBRMzhfNSwgUTQ0XzUKUmVhY3RfbWFuaXAgPSBRMTRfMSwgUTIxXzEsIFEyMl8xLCBRMzNfMSwgUTM5XzEsIFE0NV8xICAKUmVhY3Rfb3ZlcmJsb3cgPSBRMTRfMiwgUTIxXzIsIFEyN18yLCBRMzNfMiwgUTM5XzIsIFE0NV8yClJlYWN0X2Fubm95ID0gUTE0XzMsIFEyMV8zLCBRMjdfMywgUTMzXzMsIFEzOV8zLCBRNDVfMwpBdm9pZF90aGluaz0gUTE1XzEsIFEyMl8xLCBRMjhfMSwgUTM0XzEsIFE0MF8xLCBRNDZfMSAKQXZvaWRfbG9vayA9IFExNV8yLCBRMjJfMiwgUTI4XzIsIFEzNF8yLCBRNDBfMiwgUTQ2XzIKQXZvaWRfc2lnaHQgPSBRMTVfMywgUTIyXzMsIFEyOF8zLCBRMzRfMywgUTQwXzMsIFE0Nl8zCgoKCmBgYHtyfQoKZGF0YV9zbW9rX3Jlc3AgPC1yZW5hbWUoZGF0YV9zbW9rX3Jlc3AsIGRhdGU9RW5kRGF0ZSwgY29tcGxldGVkPUZpbmlzaGVkLAogICAgICAgICAgICAgICAgICBJRCA9IFExLCAKICAgICAgICAgICAgICAgICAgUXVpdF9pbnQgPSBRMywgCiAgICAgICAgICAgICAgICAgIExpa2VfaGFybSA9IFE0XzEsCiAgICAgICAgICAgICAgICAgIFNldmVyaXR5X2hhcm0gPSBRN18xCiAgICAgICAgICAgICAgICAgICAgKQoKIyBOZXh0OiBjcmVhdGUgbmV3IGNvbHVtbnMgd2l0aCB0b3RhbCB3YXJuaW5nIHJlc3Agc2NvcmVzCgoKCmBgYAoKCgoKRG8gYSBjaGVjayBvZiBmb3IgbWlzc2luZyB2YWx1ZXMgaW4gdGhlIGRhdGEKCmBgYHtyfQoKbWlzc2luZy52YWx1ZXMgPC0gZGYgJT4lCiAgICBnYXRoZXIoa2V5ID0gImtleSIsIHZhbHVlID0gInZhbCIpICU+JQogICAgbXV0YXRlKGlzLm1pc3NpbmcgPSBpcy5uYSh2YWwpKSAlPiUKICAgIGdyb3VwX2J5KGtleSwgaXMubWlzc2luZykgJT4lCiAgICBzdW1tYXJpc2UobnVtLm1pc3NpbmcgPSBuKCkpICU+JQogICAgZmlsdGVyKGlzLm1pc3Npbmc9PVQpICU+JQogICAgc2VsZWN0KC1pcy5taXNzaW5nKSAlPiUKICAgIGFycmFuZ2UoZGVzYyhudW0ubWlzc2luZykpIAoKCmBgYAoKCg==</div>
 
 
 
