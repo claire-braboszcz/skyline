@@ -8,7 +8,7 @@ output:
 
 library(tidyverse)
 library(lubridate)
-
+library(here)
 
 
 ###########################################################
@@ -18,19 +18,19 @@ library(lubridate)
 
 ### read filename from Qualtrics generated csv files
 
+day_filepath =  here::here("Day")
 
-day_filepath =  "~/Documents/STUDY/EEG-Tobacco/DATA/SURVEYS/Day/"
+evening_filepath = here::here("Evening")
 
-evening_filepath = "~/Documents/STUDY/EEG-Tobacco/DATA/SURVEYS/Evening"
-
-eff_evening_filepath = "~/Documents/STUDY/EEG-Tobacco/DATA/SURVEYS/Every3days"
-
-cond_file = "~/Documents/STUDY/EEG-Tobacco/DATA/expe_condition.csv"
+eff_evening_filepath = here::here("Every3days")
 
 
-output_filepath = "~/Documents/STUDY/EEG-Tobacco/DATA/SURVEYS"
+cond_file = here::here("expe_condition.csv")
 
-output_file = file.path(output_filepath, "behav_end_data.csv")
+
+output_file = file.path(here::here(), "complete_pp_data.csv")
+
+output_file2 = file.path(here::here(), "uncomplete_pp_data.csv")
 
 
 
@@ -140,8 +140,9 @@ sum(good_pp$condition)
 #### export to csv file
 
 # export to csv
-write_csv(good_pp, file.path(output_filepath, 'good_pp.csv') )
+write_csv(good_pp, output_file )
 
+write_csv(mid_pp, output_file2 )
 
 
 

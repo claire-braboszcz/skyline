@@ -8,7 +8,7 @@ output:
 
 library(tidyverse)
 library(lubridate)
-
+library(here)
 
 
 ###########################################################
@@ -19,19 +19,18 @@ library(lubridate)
 ### read filename from Qualtrics generated csv files
 
 
-day_filepath =  "~/Documents/STUDY/EEG-Tobacco/DATA/SURVEYS/Day/"
+day_filepath =  here::here("Day")
 
-evening_filepath = "~/Documents/STUDY/EEG-Tobacco/DATA/SURVEYS/Evening"
+evening_filepath = here::here("Evening")
 
-eff_evening_filepath = "~/Documents/STUDY/EEG-Tobacco/DATA/SURVEYS/Every3days"
-
-
-output_filepath = "~/Documents/STUDY/EEG-Tobacco/DATA/SURVEYS"
-
-output_file = file.path(output_filepath, paste(today(),"monitoring.csv"))
+eff_evening_filepath = here::here("Every3days")
 
 
-filename_current = "/home/claire/Documents/STUDY/EEG-Tobacco/DATA/current_pps.csv"
+
+output_file = file.path(here::here(), paste(today(),"monitoring.csv"))
+
+
+filename_current = file.path(here::here(), "current_pps.csv")
 
 
 filename_phone = "/home/claire/Documents/STUDY/EEG-Tobacco/DATA/current_phone.csv"
