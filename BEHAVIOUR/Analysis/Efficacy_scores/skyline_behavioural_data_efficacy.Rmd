@@ -18,6 +18,10 @@ Preprocessing
 Efficacy scores were collected in:
 - every 3 days evening questionnaires (!! bug in the plateform, question was presented every day for some participants -> need to work out which and take every 3 day measures)
 
+- baseline and followup efficacy
+
+- Participants who did the baseline and followup Efficacy score on the same survey as the every 3 days one: 
+562, 477, 703, 786
 
 ```{r}
  #get filepaths
@@ -30,10 +34,13 @@ save_figure = here("Figures")
 
 #read files
 
-files_eff_eve <-dir(path=here("data") , pattern = "*.csv") 
+files_eff_eve <-dir(path=here("data/Every3days") , pattern = "*.csv") 
+files_eff_bf <-dir(path=here("data/BaselineFollowup") , pattern = "*.csv") 
 
 
-data_eff <-read.csv(here("data", files_eff_eve), header = TRUE, sep = ",", dec = ".", stringsAsFactors = FALSE)
+data_eff <-read.csv(here("data/Every3days", files_eff_eve), header = TRUE, sep = ",", dec = ".", stringsAsFactors = FALSE)
+
+data_eff_bf <-read.csv(here("data/BaselineFollowup", files_eff_bf), header = TRUE, sep = ",", dec = ".", stringsAsFactors = FALSE)
 
 
 # condition file
@@ -54,17 +61,35 @@ data_eff <-rename(data_eff, date=EndDate, completed=Finished,
 data_eff$ID<-as.factor(data_eff$ID)
 
 
+data_eff_bf <-rename(data_eff_bf, date=EndDate, completed=Finished,
+                  ID = Q1, 
+                  r_eff1 = Q3_1, r_eff2 = Q3_2, 
+                  s_eff1= Q4_1, s_eff2 = Q4_2, s_eff3= Q4_3, 
+                  hope = Q7_1, 
+                  quit_int = Q5
+                  )
+
+data_eff_bf$ID<-as.factor(data_eff_bf$ID)
+
+
+
 cond <-rename(cond, ID = "Subject ID", condition = "Condition = Intervention", removed= "REMOVED")
 cond$ID<-as.factor(cond$ID)
 
 # merge cond and eff files to get information about particopants condition
 
 df <- full_join(cond, data_eff)
+df_bf <- inner_join(cond, data_eff_bf)
+
+
 df$ID<-as.factor(df$ID)
+df_bf$ID<-as.factor(df_bf$ID)
+
 # remove un-used dataframes
-rm(cond, data_eff)
+rm(cond, data_eff, data_eff_bf)
 
 df$condition<-recode(df$condition, '0' = "control", '1' = "intervention")
+df_bf$condition<-recode(df_bf$condition, '0' = "control", '1' = "intervention")
 
 
 #Replace missing values and keep only participants who were not removed
@@ -109,6 +134,7 @@ df<-drop_na(df, condition)
 
 -> get the mean of all individual scores in each condition for each day
   - 1. define days 1-2-3 etc.. 
+  - check for those pp who did baseline and followup (IDs 562, 477, 703, 786)
   - 2.1 find participants with a maximum of 9 n_day
   - 2.2 find participants with more than 9 n_day entries
     2.3-> take only only every 3 days: 1, 6, 9, 12, 15, 18, 21
@@ -120,9 +146,47 @@ df<-drop_na(df, condition)
 ```{r}
 # first reduce number of columns to keep only those of interest
 df <- select(df, ID, condition, date, r_eff1:quit_int )
+df_bf <- select(df_bf, ID, condition, date, r_eff1:quit_int )
+
 
 # transform the columns for response and self efficacy that were charactuers in numeric tyoe           
 df <-df %>% mutate_each(funs(as.numeric), -ID, -quit_int, -date, -condition) 
+df_bf <-df_bf %>% mutate_each(funs(as.numeric), -ID, -quit_int, -date, -condition) 
+
+
+#---------------------------------#
+# get data for the 4 pps who did the baseline and followup efficacy measure 
+
+ID_add_to_bf <-c(562, 477, 703, 786)
+
+tmp<- df %>% 
+  filter(ID %in% ID_add_to_bf)
+
+tmp_bf_score <- tmp %>%  # get baseline and folowu up scores - 1st and last 
+  group_by(ID) %>% 
+  slice(c(1, n()))
+
+df_bf<-full_join(df_bf, tmp_bf_score)  # add to df_bf
+
+# remove first and last measures then put back into main df dataframe, remove these ID from df before !
+
+tmp_df <- tmp %>% 
+  group_by(ID) %>% 
+  slice(2:(n()-1))
+
+
+# remove those ID from df then put them back
+
+df<- df %>% 
+  filter(!ID %in% ID_add_to_bf )
+
+df<-full_join(df, tmp_df)
+
+rm(tmp, tmp_bf_score, tmp_df)
+
+#------------------------------------#
+
+
 
 # add a counter for each row per ID (see 1.)
 df <- df %>% 
@@ -132,6 +196,9 @@ df <- df %>%
 
 df$n_day<-as.factor(df$n_day)
 df$condition <- as.factor(df$condition)
+
+
+
 
 # get IDs of pp who did the survey every day instead of every 3 days
 get_ID_bug <- df %>% 
@@ -156,6 +223,7 @@ tmp <- df %>%
 
 df9<- rbind(df9, tmp)
 
+rm(tmp)
 
 # count how many of each day per condition
 # _> need to get summary per condition per day not repetitionShow in New WindowClear OutputExpand/Collapse Output
@@ -229,6 +297,20 @@ ggtitle("Mean scores for how hopeful about quitting smoking")
 
 
 ```
+
+To DO: code for those new participants doing baseline and follow up measures
+
+Participants who did the baseline and followup Efficacy score on the same survey as the every 3 days one: 
+562, 477, 703, 786
+
+
+```{r}
+
+  
+
+
+```
+
 
 
 Next step: model
