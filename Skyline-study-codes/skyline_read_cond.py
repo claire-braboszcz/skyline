@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+                                                                                                                                                                                  #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
 Created on Wed Mar 27 15:14:01 2019
@@ -16,8 +16,7 @@ import pandas as pd
 #-------------- Parameters -----------------
 
 # enter participant ID
-pp_id =786
-
+pp_id =670
 # Enter participant's experimental group, chose from:
 #'Study ID EEG Female'
 #'Study ID EEG Male'

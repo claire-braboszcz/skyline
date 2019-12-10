@@ -3,24 +3,37 @@ title: "Skyline Survey data analysis Response to smoking health warnings at base
 output: html_notebook
 ---
 
+Process both EEG and online data
+
+
 ```{r}
 library(tidyverse)
 library(here)
+library(lubridate)
 
 
-
-fpath = here("data")
+fpath = here::here("data")
 cond_file = "~/Documents/STUDY/EEG-Tobacco/DATA/expe_condition.csv"
-save_figure = here("Figures")
+save_figure = here::here("Figures")
 
 #read files
 
-files <-dir(path=fpath, pattern = "*.csv") 
+files <-dir(path=here::here("data"), pattern = "*.csv") 
 
-data_smok_resp <-read.csv(file.path(fpath, files), header = TRUE, sep = ",", dec = ".", stringsAsFactors = FALSE)
+#'read in qualtrics data while skipping qualtrics column names row to have access directly to question text as column name
+data_smok_resp <- files %>% 
+      map(~read_csv(file.path(fpath, .), col_names = TRUE, skip =0)) %>% 
+      reduce(bind_rows)  
+
 
 # condition file
 cond <- read_csv(cond_file)
+
+cond<-rename(cond,  ID = "Subject ID", condition = "Condition = Intervention", removed= "REMOVED")
+
+cond$ID<-as.factor(cond$ID)
+
+
 
 ```
 
@@ -43,18 +56,63 @@ Avoid_sight = Q15_3, Q22_3, Q28_3, Q34_3, Q40_3, Q46_3
 
 
 
+Find a way to sum data of columns for same question  by selecting based on word in question 
+ex: select(data_smok_resp, contains("avoid thinking"))
+
+
+
+
 ```{r}
 
-data_smok_resp <-rename(data_smok_resp, date=EndDate, completed=Finished,
-                  ID = Q1, 
-                  Quit_int = Q3, 
-                  Like_harm = Q4_1,
-                  Severity_harm = Q7_1
-                    )
+data_smok_resp <-rename(data_smok_resp, ID = Q1)
+data_smok_resp$ID<-as.factor(data_smok_resp$ID)
+               
 
-# Next: create new columns with total warning resp scores
+# transform the columns  that were charactuers in numeric tyoe           
+data_smok_resp <-data_smok_resp %>% mutate_each(funs(as.numeric), -ID, -Q3, -EndDate, -Finished) 
 
 
+
+
+tmp <- data_smok_resp %>% 
+  group_by(ID) %>% 
+  transmute(
+        date=EndDate, 
+        completed=Finished,
+        Quit_int = Q3, 
+        Like_harm = Q4_1,
+        Severity_harm = Q7_1,
+        Neg_disgust = sum(Q10_1, Q19_1, Q25_1, Q31_1, Q37_1, Q43_1), 
+        Neg_scared = sum(Q10_2, Q19_2, Q25_2, Q31_2, Q37_2, Q43_2), 
+        Neg_regret = sum(Q10_3, Q19_3, Q25_3, Q31_3, Q37_3, Q43_3), 
+        Believe = sum(Q13_1, Q20_1, Q26_1, Q32_1, Q38_1, Q44_1), 
+        Harm = sum(Q13_2, Q20_2, Q26_2, Q32_2, Q38_2, Q44_2), 
+        Effect_discourage= sum(Q13_3, Q20_3, Q26_3, Q32_2, Q38_3, Q44_3),  
+        Effect_unpleasant= sum(Q13_4, Q20_4, Q26_4, Q32_4, Q38_4, Q44_4), 
+        Effect_concern = sum(Q13_5, Q20_5, Q26_5, Q32_5, Q38_5, Q44_5), 
+        React_manip = sum(Q14_1, Q21_1, Q22_1, Q33_1, Q39_1, Q45_1),  
+        React_overblow = sum(Q14_2, Q21_2, Q27_2, Q33_2, Q39_2, Q45_2),
+        React_annoy = sum(Q14_3, Q21_3, Q27_3, Q33_3, Q39_3, Q45_3),
+        Avoid_think= sum(Q15_1, Q22_1, Q28_1, Q34_1, Q40_1, Q46_1), 
+        Avoid_look = sum(Q15_2, Q22_2, Q28_2, Q34_2, Q40_2, Q46_2),
+        Avoid_sight = sum(Q15_3, Q22_3, Q28_3, Q34_3, Q40_3, Q46_3)
+         )
+
+df<- full_join(cond, tmp)
+
+df$ID <- as.factor(df$ID)
+
+rm(cond, tmp, data_smok_resp)
+
+df$condition<-recode(df$condition, '0' = "control", '1' = "intervention")
+df$condition <- as.factor(df$condition)
+
+#Replace missing values and keep only participants who were not removed
+df$removed<-df$removed %>% replace(is.na(.), 0)
+df<-df%>%filter(removed == 0)
+
+#filter to get only completed = True
+df<-df %>%filter(completed == 'True')
 
 ```
 
@@ -74,7 +132,31 @@ missing.values <- df %>%
     select(-is.missing) %>%
     arrange(desc(num.missing)) 
 
+missing.values
+```
+
+Look at why we have condition with missing values
+```{r}
+
+which(is.na(df$condition))
+
+# remove these lines 
+
+df<-drop_na(df, condition)
+
 
 ```
+
+
+```{r}
+
+df_tmp<- df %>% 
+  group_by(ID) %>% 
+  tally()
+
+
+
+```
+
 
 
