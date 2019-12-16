@@ -65,8 +65,8 @@ data_eff_bf <-rename(data_eff_bf, date=EndDate, completed=Finished,
                   ID = Q1, 
                   r_eff1 = Q3_1, r_eff2 = Q3_2, 
                   s_eff1= Q4_1, s_eff2 = Q4_2, s_eff3= Q4_3, 
-                  hope = Q7_1, 
-                  quit_int = Q5
+                  hope = Q7_1
+                 # quit_int = Q5
                   )
 
 data_eff_bf$ID<-as.factor(data_eff_bf$ID)
@@ -145,13 +145,13 @@ df<-drop_na(df, condition)
 
 ```{r}
 # first reduce number of columns to keep only those of interest
-df <- select(df, ID, condition, date, r_eff1:quit_int )
-df_bf <- select(df_bf, ID, condition, date, r_eff1:quit_int )
+df <- select(df, ID, condition, date, r_eff1:quit_int)
+df_bf <- select(df_bf, ID, condition, date, r_eff1:hope )
 
 
 # transform the columns for response and self efficacy that were charactuers in numeric tyoe           
 df <-df %>% mutate_each(funs(as.numeric), -ID, -quit_int, -date, -condition) 
-df_bf <-df_bf %>% mutate_each(funs(as.numeric), -ID, -quit_int, -date, -condition) 
+df_bf <-df_bf %>% mutate_each(funs(as.numeric), -ID, -date, -condition) 
 
 
 #---------------------------------#
@@ -186,8 +186,52 @@ rm(tmp, tmp_bf_score, tmp_df)
 
 #------------------------------------#
 
+# get IDs of pp who did the survey every day instead of every 3 days
 
-u
+# add a counter for each row per ID (see 1.)
+df <- df %>% 
+  group_by(ID) %>% 
+  mutate(n_day = row_number()) %>% 
+  select(ID, condition, n_day, everything())
+df$n_day<-as.factor(df$n_day)
+df$condition <- as.factor(df$condition)
+df$n_day<-as.factor(df$n_day)
+df$condition <- as.factor(df$condition)
+
+
+get_ID_bug <- df %>% 
+  group_by(ID) %>% 
+  mutate(count = row_number()) %>% 
+  filter(count>9) %>% 
+  distinct(ID)
+  
+# for those IDs, only select data from the 1, 6, 9, 12, 15, 18, 21, 24, 27 days, and rename 1:9   
+days<-c(1, 6, 9, 12, 15, 18, 21, 24, 27)
+# create a new dataframe combining all pps 
+df9<- df %>% 
+  filter(ID %in%get_ID_bug$ID & n_day %in% days) 
+  
+df9$n_day<-recode_factor(df9$n_day, '1' = "1", '6'="2", '9'="3", '12' ="4", '15'="5", '18'="6", '21'="7", '24'="8", '27'="9")
+tmp <- df %>% 
+filter(! ID %in% (get_ID_bug$ID) )
+
+
+df9<- rbind(df9, tmp)
+# count how many of each day per condition
+# _> need to get summary per condition per day not repetitionShow in New WindowClear OutputExpand/Collapse Output
+n_rep <- df9 %>% group_by(condition, n_day) %>%
+ summarize(count=n())
+
+n_rep <-n_rep %>% drop_na()
+
+
+# plot
+ggplot(data= n_rep, aes(x = n_day, y=count)) +
+  geom_point(mapping = aes(colour = condition) ) +
+  ggtitle("Number of response per day - efficacy questionnaire")
+  ggsave('nresp_per_day.jpg', plot =last_plot(), dpi =300, path= save_figure)
+ 
+
 
 ```
 
