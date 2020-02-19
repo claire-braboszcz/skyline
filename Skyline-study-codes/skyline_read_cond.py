@@ -16,7 +16,7 @@ import pandas as pd
 #-------------- Parameters -----------------
 
 # enter participant ID
-pp_id =670
+pp_id = 711
 # Enter participant's experimental group, chose from:
 #'Study ID EEG Female'
 #'Study ID EEG Male'
@@ -29,7 +29,7 @@ pp_cond = 'Cond EEG Male'
 
 
 
-condfile = '/home/claire/Documents/STUDY/EEG-Tobacco/Skyline Participants Forms/skyline_study_id_cond.csv'
+condfile = '/home/claire/Documents/scripts-local/skyline/Skyline-study-codes/skyline_study_id_cond.csv'
 
 
 cond = pd.read_csv(condfile)

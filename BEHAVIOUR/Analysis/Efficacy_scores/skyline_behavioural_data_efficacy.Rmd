@@ -129,17 +129,19 @@ df<-drop_na(df, condition)
 
 
 
- Compute response and self efficacy scores
- ------------------------------------------
+ Compute response and self efficacy scores:
+--------------------------------------------
 
--> get the mean of all individual scores in each condition for each day
-  - 1. define days 1-2-3 etc.. 
-  - check for those pp who did baseline and followup (IDs 562, 477, 703, 786)
-  - 2.1 find participants with a maximum of 9 n_day
-  - 2.2 find participants with more than 9 n_day entries
-    2.3-> take only only every 3 days: 1, 6, 9, 12, 15, 18, 21
-  -> create new dataset  
-  - 3. count how many of each day per condition
+get the mean of all individual scores in each condition for each day:
+
+- define days 1-2-3 etc.
+- check for those pp who did baseline and followup (IDs 562, 477, 703, 786)
+- find participants with a maximum of 9 n_day
+- find participants with more than 9 n_day entries
+- take only only every 3 days: 1, 6, 9, 12, 15, 18, 21
+
+create new dataset:  
+- count how many of each day per condition
 
 
 
@@ -288,7 +290,6 @@ ggtitle("Mean scores for how hopeful about quitting smoking")
 
 ```
 
-To DO: code for those new participants doing baseline and follow up measures
 
 
 

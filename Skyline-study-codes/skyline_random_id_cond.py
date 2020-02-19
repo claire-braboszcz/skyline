@@ -15,7 +15,7 @@ import pandas as pd
 #    return ''.join(random.choice(chars) for x in range(size))
 
 
-savepath ='/home/claire/Documents/STUDY/EEG-Tobacco/Skyline Participants Forms/'
+savepath ='/home/claire/Documents/scripts-local/skyline/Skyline-study-codes/skyline_screening_study_id.csv'
 
 #--------------------------
 # create random study ID
@@ -51,7 +51,7 @@ d = {'Screening ID Main Male' : screening_id_main_m, 'Study ID Main Male': study
 #create dataframe
 df = pd.DataFrame(d)
 
-df.to_csv('skyline_screening_study_id.csv')
+#df.to_csv('skyline_screening_study_id_1812.csv')
 
 #----------------------------
 # Randomize study conditions
@@ -81,7 +81,7 @@ d_cond ={ 'Study ID Main Male': study_id_main_m, 'Cond Main Male': cond_main_m,
 
 df_cond = pd.DataFrame(d_cond)
 
-df_cond.to_csv('skyline_study_id_cond.csv')
+#df_cond.to_csv('skyline_study_id_cond_1812.csv')
 
 
 #-----------------------------------------------
