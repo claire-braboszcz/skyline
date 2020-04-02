@@ -12,10 +12,12 @@ Perform bandpass filtering to prep data for ICA - another filter is used for dat
     
 import mne
 import os
-from mne_bids import make_bids_folders, make_bids_basename
 
-get_ipython().magic('matplotlib qt')
+from config import (fname, ica_bandpass_fmin, ica_bandpass_fmax, n_jobs)
 
+
+# Be verbose
+mne.set_log_level('INFO')
 
 
 print('Processing subject:', subj, 'session:', sess)
@@ -25,16 +27,8 @@ figs_before = []
 figs_after = []
 
 
-preproc_path_folder =  make_bids_folders(subject = str(subj), session= str(sess),
-                            kind='eeg', bids_root=preproc_root,make_dir=True, overwrite =False)
 
 
-# load raw data
-bids_basename = make_bids_basename(subject=str(subj), session=str(sess))
-bids_fname = bids_basename + '_eeg.vhdr'
-
-
-fname = os.path.join(bids_root, 'sub-%d' %subj,  'ses-%d' %sess, 'eeg', bids_fname)
 raw = mne.io.read_raw_brainvision(fname, preload=True)
 
 
@@ -44,7 +38,10 @@ filt_raw.load_data().filter(l_freq=ica_bandpass_fmin, h_freq=ica_bandpass_fmax, 
         h_trans_bandwidth='auto', filter_length='auto', phase='zero',
         fir_window='hamming', fir_design='firwin', n_jobs=n_jobs)
 
-filt_raw.save(os.path.join( preproc_path_folder,'filter_ica_raw.fif'))
+
+f=fname.filt_ica(subject='sub-'+ str(subj), session='ses-'+str(sess))
+
+filt_raw.save(f, overwrite = False)
 
 # Make a plot of the PSD before and after filtering
 figs_before.append(raw.plot_psd(show=False))
