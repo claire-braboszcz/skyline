@@ -3,29 +3,45 @@
 
 # In[ ]:
 
+"""
+Create BIDS-compatible derivatives folder for each participant
 
-´´´
-Create BIDS-compatible derivatives folder
-´´´
+"""
 
 import os
 
+from config import (fname, bids_root, bids_root_der)
+import argparse
 
 
-bids_root = '/home/claire/Documents/STUDY/EEG-Tobacco/Skyline-EEG-BIDS'
-bids_root_der = os.path.join(bids_root, 'derivatives')
-if not os.path.exists(bids_root_der):
-    os.makedirs(bids_root_der)
 
-preproc_root = os.path.join(bids_root_der, 'eeg_pre_process')
-if not os.path.exists(preproc_root):
-    os.makedirs(preproc_root)
+# Handle command line arguments
+parser = argparse.ArgumentParser(description=__doc__)
+parser.add_argument('subject', metavar='subj', help='The subject to process')
+parser.add_argument('session', metavar='sess', help='The session to process')
 
-pv_root = os.path.join(bids_root_der, 'passive_viewing')
-if not os.path.exists(pv_root):
-    os.makedirs(pv_root)
+args = parser.parse_args()
+subj= args.subject
+sess= args.session
 
-gng_root = os.path.join(bids_root_der, 'go_nogo')
-if not os.path.exists(gng_root):
-    os.makedirs(gng_root)
+
+print('Making folders for subject:', subj, 'session:', sess)
+
+
+f_preproc=fname.folder_preproc(bids_root_der=bids_root_der, subject='sub-'+ str(subj), session='ses-'+str(sess))
+f_gonogo=fname.folder_gonogo(bids_root_der=bids_root_der, subject='sub-'+ str(subj), session='ses-'+str(sess))
+f_passview=fname.folder_passview(bids_root_der=bids_root_der, subject='sub-'+ str(subj), session='ses-'+str(sess))
+
+
+
+if not os.path.exists(f_preproc):
+    os.makedirs(f_preproc)
+
+if not os.path.exists(f_gonogo):
+    os.makedirs(f_gonogo)
+
+
+if not os.path.exists(f_passview):
+    os.makedirs(f_passview)
+
 

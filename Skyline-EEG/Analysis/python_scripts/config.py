@@ -11,18 +11,19 @@ Skyline config file
 
 Configuration parameters for the skyline study
 
+
+adapted from https://github.com/AaltoImagingLanguage/conpy/tree/master/scripts
+
 """
 
 from fnames import FileNames
-from mne_bids import make_bids_folders, make_bids_basename
 
 
 # filepath for analysis root folder 
-bids_root = '/home/claire/Documents/STUDY/EEG-Tobacco/Skyline-EEG-BIDS'
+#bids_root = '/home/claire/Documents/STUDY/EEG-Tobacco/Skyline-EEG-BIDS'
 
 # filepath for derivatives files
-bids_root_der_preproc ='/home/claire/Documents/STUDY/EEG-Tobacco/Skyline-EEG-BIDS/derivatives/eeg_pre_process'
-
+#bids_root_der='/home/claire/Documents/STUDY/EEG-Tobacco/Skyline-EEG-BIDS/derivatives'
 
 
 n_jobs=8
@@ -33,14 +34,7 @@ n_jobs=8
 
 events_dict={'go': 11, 'nogo': 13, 'hw': 21, 'neg': 25, 'neut': 22, 'button_press':8, 'fixation':44}  
 
-#--------------------
-# filter parameters 
-#--------------------
 
-# for data used to run ICA
-
-ica_bandpass_fmin = 1
-ica_bandpass_fmax = 40
 
 
 ###################################
@@ -97,6 +91,23 @@ subject_ids=[146,
 
 sessions = [1, 2]
 
+###############################################################################
+
+# STUDY Pre processing and analysis parameters
+
+
+
+
+# filter parameters for data used to run ICA
+
+ica_bandpass_fmin = 1
+ica_bandpass_fmax = 40
+
+
+# Maximum number of ICA components to reject
+n_ecg_components = 2  # ICA components that correlate with heart beats
+n_eog_components = 2  # ICA components that correlate with eye blinks
+
 
 ###############################################################################
 # Templates for filenames
@@ -107,10 +118,13 @@ sessions = [1, 2]
 fname = FileNames()
 
 # Some directories
-fname.add('bids_root', bids_root)
-fname.add('bids_root_der_preproc', '{bids_root_der}/eeg_preprocess')
-fname.add('bids_root_der_gonogo', '{bids_root_der}/go_nogo')
-fname.add('bids_root_der_passview', '{bids_root_der}/passive_viewing')
+fname.add('bids_root', '/home/claire/Documents/STUDY/EEG-Tobacco/Skyline-EEG-BIDS/')
+fname.add('bids_root_der', '/home/claire/Documents/STUDY/EEG-Tobacco/Skyline-EEG-BIDS/derivatives/')
+
+
+fname.add('folder_preproc', '{bids_root_der}/eeg_preprocess/{subject}/{session}/eeg/')
+fname.add('folder_gonogo', '{bids_root_der}/go_nogo/{subject}/{session}/eeg/')
+fname.add('folder_passview', '{bids_root_der}/passive_viewing/{subject}/{session}/eeg/')
 
 
 # filename for eeg param
@@ -120,20 +134,18 @@ fname.add('eeg_montage','{bids_root}/EEG_montage/AC-64.bvef')
 #filenames for files generated during analysis
 
 fname.add('raw','{bids_root}/{subject}/{session}/eeg/{subject}_{session}_eeg.vhdr')
-fname.add('filt_ica','{bids_root_der_preproc}/{subject}/{session}/eeg/{subject}_{session}_filt_{fmin}_{fmax}_raw.fif')
-
+fname.add('filt_ica','{folder_preproc}/{subject}_{session}_filt_{fmin}_{fmax}_raw.fif')
+fname.add('ica', '{folder_preproc}/{subject}_{session}_ica.fif')
 
 
 
 
 # Filenames for MNE reports
-fname.add('reports_dir', '{bids_root}/reports/')
+
+
+fname.add('reports_dir', '{bids_root_der}/reports/')
 fname.add('report', '{reports_dir}/{subject}_{session}_report.h5')
 fname.add('report_html', '{reports_dir}/{subject}_{session}_report.html')
-
-
-
-
 
 
 
