@@ -64,7 +64,7 @@ subject_ids=[146,
             507,
             537,
             545,
-            558,
+           #558,
             562,
             572,
             577,
@@ -90,7 +90,7 @@ subject_ids=[146,
 
 sessions = [1, 2]
 
-subj_interv=[558,
+subj_interv=[#558,
             278,
             148,
             276,
@@ -172,6 +172,8 @@ events_dict={'go': 11, 'nogo': 13, 'hw': 21, 'neg': 25, 'neut': 22, 'button_pres
 
 tmin_pv, tmax_pv = -1.0001, 1.0001
 event_dict_pv = {'hw': 21, 'neg': 25, 'neut': 22}
+
+
 baseline_pv=(-1, 0)
 
 tmin_gng, tmax_gng = -0.5, 0.6
@@ -258,7 +260,9 @@ fname.add('group_report_html', '{reports_dir}/group_report.html')
 
 
 
+# filepath for figures
 
+fname.add('figures_pv', '{bids_root_der}/figures/passive_viewing')
 
 
 

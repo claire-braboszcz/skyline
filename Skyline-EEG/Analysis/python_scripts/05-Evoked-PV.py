@@ -76,7 +76,6 @@ evoked_neut=epochs['neut'].average()
 contrast_lpp_hw= mne.combine_evoked([evoked_hw, -evoked_neut], weights='equal')
 contrast_lpp_neg= mne.combine_evoked([evoked_neg, -evoked_neut], weights='equal')
 
-contrast_lpp_hw_neg= mne.combine_evoked([contrast_lpp_hw, contrast_lpp_neg], weights=[1, -1])
 
 contrast_lpp_hw.comment= 'hw-neut'
 contrast_lpp_neg.comment= 'neg-neut'
@@ -165,7 +164,7 @@ with mne.open_report(fname.report(subject='sub-'+ str(subj), session='ses-'+str(
     report.save(fname.report_html(subject='sub-'+ str(subj), session='ses-'+str(sess)), overwrite=True,
                 open_browser=False)
 
-#fdgdfg
+
 
 
 # save all evoked files in 1 .fif file

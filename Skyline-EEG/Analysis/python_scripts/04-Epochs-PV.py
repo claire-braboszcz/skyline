@@ -11,8 +11,12 @@ import argparse
 import mne
 from mne.preprocessing import read_ica
 from config import (fname, erp_bandpass_fmin, erp_bandpass_fmax, 
-                    events_dict, tmin_pv, tmax_pv , event_dict_pv, screen_offset, reject_criteria, 
-                    flat_criteria, baseline_pv,  n_jobs)
+                    tmin_pv, tmax_pv , 
+                    event_dict_pv, 
+                    screen_offset, 
+                    reject_criteria, 
+                    flat_criteria, 
+                    baseline_pv)
 
 
 
@@ -26,13 +30,18 @@ mne.set_log_level('INFO')
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument('subject', metavar='subj', help='The subject to process')
 parser.add_argument('session', metavar='sess', help='The session to process')
+#parser.add_argument('event dictionary', metavar='event_dict', help='Event names')
 
 args = parser.parse_args()
 subj= args.subject
 sess= args.session
-
+#event_dict= args.event_dict
 
 print('Epochs Passive viewing', 'Processing subject:', subj, 'session:', sess)
+
+
+
+
 
 
 # get the events from raw brainvision files

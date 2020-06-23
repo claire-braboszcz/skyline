@@ -155,6 +155,21 @@ def task_epoch_pv():
                                   session='ses-'+str(sess))
             
             
+#
+#            if subj in subj_interv:
+#                if sess == 1:
+#                    event_dict = event_dict_pv_int_t1
+#                elif sess==2:
+#                    event_dict = event_dict_pv_int_t2
+#            
+#            elif subj in subj_control:
+#                 if sess == 1:
+#                    event_dict = event_dict_pv_ctr_t1
+#                 elif sess==2:
+#                    event_dict = event_dict_pv_ctr_t2
+#                        
+                        
+            
             yield dict(
                     name = "%s-%s" % (subj, sess),  
                     file_dep =[filt_erp_fname, '04-Epochs-PV.py'], 
