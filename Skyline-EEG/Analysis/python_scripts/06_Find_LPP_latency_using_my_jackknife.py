@@ -8,8 +8,7 @@ Created on Thu May 28 16:43:41 2020
 
 #find half-peak latency of the LPP in each condition
 # use jackknife leave one out method
-
-import util_latency as ul
+import my_jackknife_latency as mjack
 import mne
 from mne.channels import find_ch_connectivity, make_1020_channel_selections
 from mne.stats import spatio_temporal_cluster_test
@@ -27,10 +26,8 @@ from config import (fname,
 import numpy as np
 import matplotlib.pyplot as plt
 
-from sklearn.model_selection import LeaveOneOut
 import pandas as pd
 
-from scipy import interpolate
 import pingouin as pg
 import seaborn as sns
 
@@ -69,74 +66,37 @@ for subj in subject_ids:
 
 elecs= ['Pz']#, 'P3', 'P4']#, 'P3', 'P4']  # electrodes on which we compute the lpp
 
-all_lpp=[all_evokeds_control_1[3], all_evokeds_control_2[3], all_evokeds_interv_1[3], all_evokeds_interv_2[3]]
+# lpp to health warning pictures
+all_lpp_hw=[all_evokeds_control_1[3], all_evokeds_control_2[3], all_evokeds_interv_1[3], all_evokeds_interv_2[3]]
 
-gd_ave_erp=[list() for _ in range(4)]
+# lpp to negative stimuli
+all_lpp_neg=[all_evokeds_control_1[4], all_evokeds_control_2[4], all_evokeds_interv_1[4], all_evokeds_interv_2[4]]
 
-loo=LeaveOneOut()
-
-
-for ind, lpp in enumerate(all_lpp):
-
-    loo.get_n_splits(lpp)
-    
-    # get series of grand average with leave-one-out
-    for idx in loo.split(lpp):
-        print(idx)
-        evokeds_loo=[]
-        
-        for j in idx[0]:
-            evokeds_loo.append(lpp[j].pick_channels(elecs).
-                               apply_baseline((None, 0)))
-            print(idx[0])
-            
-        gd_ave_erp[ind].append(mne.grand_average(evokeds_loo))
     
 # get the mean of the 3 electrodes of interest to form a ROI
 #gd_ave_roi =[]
 
 #for idx, ave in enumerate(gd_ave_erp):
 #    gd_ave_roi.append(np.mean(ave.data[:,:], axis=0))
+
+
+gd_erp_lpp_hw= mjack.get_average_erp_leave_one_out(all_lpp_hw, len(all_lpp_hw), elecs)  
+
+
+gd_erp_lpp_neg= mjack.get_average_erp_leave_one_out(all_lpp_neg, len(all_lpp_neg), elecs)  
         
     
-        
-# find fractional peak latency:
-#for each grand average estimate onset latency by identifying peak amplitude
-# onset, which is the first point in that time window in which amplitude exceeds
-# 50% of peak score       
-
-#min(np.absolute(np.cumsum(erp)-sum(erp)/2))
-
-# centroparietal electrodes (no CPz on montage)
 tmin, tmax = 0.25, 1.0 #0.30
-peak_frac=0.5 # fractional latencu peak
+peak_frac=0.5 # fractional latencu peak 
+      
 
-all_onsets_latency=[list() for _ in range(4)]#*len(gd_ave_erp[0]) #  save onsets for each condition
+lpp_peak_onset_hw = mjack.get_frac_peak_latency(gd_erp_lpp_hw, n_group= len(all_lpp_hw), tmin=tmin, tmax=tmax, peak_frac=peak_frac, sfreq=250)
 
 
-for n in range(0, len(all_lpp)):
-
-    for idx, erp in enumerate(gd_ave_erp[n]):
+lpp_peak_onset_neg = mjack.get_frac_peak_latency(gd_erp_lpp_neg, n_group= len(all_lpp_neg), tmin=tmin, tmax=tmax, peak_frac=peak_frac, sfreq=250)
         
-        #erp=np.mean(erp.data, axis=0)
-        
-        # get peak latency and amplitude
-        channel,  latency, amplitude= erp.get_peak(tmin=tmin, tmax=tmax,  return_amplitude=True)  
-       
-        onsetCutOff = peak_frac*amplitude     
-           
-        dataShifted = erp.data - onsetCutOff # substract onsetcutoff from data to find where it reaches 0
-    
-        interpolator = interpolate.UnivariateSpline(np.arange(-1.004,1.,1./250),dataShifted,s=0)   # interpolate points
-        
-        print(interpolator.roots())
-        latency_onsetCutOff= interpolator.roots().mean()
-        
-        all_onsets_latency[n].append(latency_onsetCutOff)
-            
-        
-#gd_ave_erp.append(mne.grand_average(evokeds).apply_baseline((None, 0)))
-
+##gd_ave_erp.append(mne.grand_average(evokeds).apply_baseline((None, 0)))
+#
 d={'CTR1': all_onsets_latency[0], 'CTR2': all_onsets_latency[1],
    'INT1':all_onsets_latency[2], 'INT2':all_onsets_latency[3]}
 
@@ -156,7 +116,12 @@ df_long= pd.melt(df_long.reset_index(), id_vars=['id', 'Time'],
 # test for normality
 pg.normality(df_long, group='Groupe', dv='Latency')
 
+
+# statistics - is there an onset difference between the groups/ time of testing
 # distribution is not normal so use non parametruc wilcoxon signes rank test
+
+
+
 
 # CTR T1 vs CTR T2
 pg.wilcoxon(all_onsets_latency[0],all_onsets_latency[1] )
