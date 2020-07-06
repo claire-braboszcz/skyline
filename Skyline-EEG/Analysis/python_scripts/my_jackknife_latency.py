@@ -12,9 +12,6 @@ import numpy as np
 from sklearn.model_selection import LeaveOneOut
 
 
-import pingouin as pg
-#import seaborn as sns
-
 
 # for jaccknife approach to erp latency 
 
