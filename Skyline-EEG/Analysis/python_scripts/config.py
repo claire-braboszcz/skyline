@@ -40,6 +40,7 @@ n_jobs=8
 # filenames and participants ID
 ###################################
 
+#558 (1st participant) is excluded due to error in stimuli timing 
 
 subject_ids=[146,
              148,                                          
@@ -86,7 +87,7 @@ subject_ids=[146,
             754,
             763,
             786
-            ]
+          ]
 
 sessions = [1, 2]
 
@@ -156,6 +157,8 @@ ica_bandpass_fmax = 40
 erp_bandpass_fmin= None
 erp_bandpass_fmax= 40
 
+# re-sampling frequency
+sfreq=250
 
 # Maximum number of ICA components to reject
 n_ecg_components = 2  # ICA components that correlate with heart beats
@@ -235,6 +238,9 @@ fname.add('eeg_montage','{bids_root}/EEG_montage/AC-64.bvef')
 fname.add('raw','{bids_root}/{subject}/{session}/eeg/{subject}_{session}_eeg.vhdr')
 fname.add('filt_ica','{folder_preproc}/{subject}_{session}_filt_{fmin}_{fmax}_raw.fif')
 fname.add('ica', '{folder_preproc}/{subject}_{session}_ica.fif')
+
+fname.add('logfile','{bids_root}/{subject}/{session}/eeg/{subject}_{session}_events.tsv')
+
 #fname.add('ica_on_epochs', '{folder_preproc}/{subject}_{session}_epochs_ica.fif')
 #fname.add('epochs_ica','{folder_preproc}/{subject}_{session}_filt_{fmin}_{fmax}_epo.fif')
 fname.add('filt_erp','{folder_preproc}/{subject}_{session}_filt_{fmin}_{fmax}_raw.fif')
