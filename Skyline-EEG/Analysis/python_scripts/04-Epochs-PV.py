@@ -11,6 +11,7 @@ import argparse
 import mne
 from mne.preprocessing import read_ica
 from config import (fname, erp_bandpass_fmin, erp_bandpass_fmax, 
+                    sfreq,
                     tmin_pv, tmax_pv , 
                     event_dict_pv, 
                     screen_offset, 
@@ -50,7 +51,7 @@ raw_bv = mne.io.read_raw_brainvision(fname.raw(
                                    subject='sub-'+ str(subj), 
                                    session='ses-'+str(sess)), preload=True)
 
-raw_bv.resample(sfreq=250)
+raw_bv.resample(sfreq=sfreq)
 
 
 events,_ = mne.events_from_annotations(raw_bv)
@@ -67,7 +68,7 @@ raw = mne.io.read_raw_fif(
                    fmax=erp_bandpass_fmax),
     preload=True)
 
-raw.resample(sfreq=250)
+raw.resample(sfreq=sfreq)
 
 # load ica weights
 print('Load ICA weights')
