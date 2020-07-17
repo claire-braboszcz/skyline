@@ -73,17 +73,22 @@ raw.resample(sfreq=sfreq)
 # load ica weights
 print('Load ICA weights')
 
-ica= read_ica(fname.ica(subject='sub-'+ str(subj), session='ses-'+str(sess)))
+ica = read_ica(fname.ica(subject='sub-'+ str(subj), session='ses-'+str(sess)))
 
 
 
 
 # Go=NoGo Task
+print('Load trials metadata')
+
+metadata = pd.read_csv(fname.metadata_gng(subject='sub-'+ str(subj), session='ses-'+str(sess)))
+
+
 print('Epoch the data - go-nogo')
+epochs_gng = mne.Epochs(raw, events, event_dict_gng, tmin_gng, tmax_gng, baseline=baseline_gng, preload=True)
 
-
-epochs_gng= mne.Epochs(raw, events, event_dict_gng, tmin_gng, tmax_gng, baseline=baseline_gng, preload=True)
-
+# add metadata to epochs object
+epochs_gng.metadata = metadata
 
 print('Interpolating bad channels')
 epochs_gng.interpolate_bads()
