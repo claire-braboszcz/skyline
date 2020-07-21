@@ -51,7 +51,8 @@ for subj in subject_ids:
             df.loc[df['value']==13, 'type'] = 'nogo'
             
             df.loc[(df['type']=='go') &( df['response']=='button press'), 'accuracy' ] = 'correct'
-            df.loc[(df['type']=='go') &( df['response']== ''), 'accuracy' ] = 'incorrect'
+            df.loc[(df['type']=='go') &( df['response'].isna()== True), 'accuracy' ] = 'incorrect'
+            df.loc[(df['type']=='nogo') &( df['response'].isna()== True), 'accuracy' ] = 'correct'
 
             df.loc[(df['type']=='nogo') &( df['response']=='button press'), 'accuracy' ] = 'false alarm'
             

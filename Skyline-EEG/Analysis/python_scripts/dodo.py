@@ -28,7 +28,7 @@ from config import (fname, subject_ids, sessions, ica_bandpass_fmin,
 
 
 DOIT_CONFIG = dict(
-    default_tasks=['epoch_pv', 'evoked_pv'],
+    default_tasks=['evoked_gng'],
     verbosity=2, sort='alphabetical',
 )
 
@@ -154,20 +154,7 @@ def task_epoch_pv():
             ica_fname = fname.ica(subject='sub-'+ str(subj),
                                   session='ses-'+str(sess))
             
-            
-#
-#            if subj in subj_interv:
-#                if sess == 1:
-#                    event_dict = event_dict_pv_int_t1
-#                elif sess==2:
-#                    event_dict = event_dict_pv_int_t2
-#            
-#            elif subj in subj_control:
-#                 if sess == 1:
-#                    event_dict = event_dict_pv_ctr_t1
-#                 elif sess==2:
-#                    event_dict = event_dict_pv_ctr_t2
-#                        
+  
                         
             
             yield dict(
@@ -208,7 +195,7 @@ def task_evoked_pv():
 
 
 def task_epoch_gng():
-    """Step 05: Epoch data for Go-NoGO task  """
+    """Step 06: Epoch data for Go-NoGO task  """
 
     for subj in subject_ids:
         for sess in sessions:
@@ -231,10 +218,36 @@ def task_epoch_gng():
             
             yield dict(
                     name = "%s-%s" % (subj, sess),  
-                    file_dep =[filt_erp_fname, ica_fname,  '05-Epochs-GNG.py'], 
+                    file_dep =[filt_erp_fname, '06-Epochs-GNG.py'], 
                     targets=[epochs_gng_fname], 
-                    actions=['python3 05-Epochs-GNG.py %s %s' % (subj, sess)],                
+                    actions=['python3 06-Epochs-GNG.py %s %s' % (subj, sess)],                
                     )
    
 
+def task_evoked_gng():
+    """Step 07: Compute Evoked data for Go Nogo task  """
+
+    for subj in subject_ids:
+        for sess in sessions:
+            
+                      
+            
+           # epochs_pv_fname = fname.epochs_pv(subject='sub-'+ str(subj), 
+           #                                 session='ses-'+str(sess)
+           #                                 )
+            
+        
+            evoked_gng_fname = fname.evoked_gng(subject='sub-'+ str(subj), 
+                                            session='ses-'+str(sess)
+                                            )
+            
+          
+            
+            
+            yield dict(
+                    name = "%s-%s" % (subj, sess),  
+                    file_dep =[ '07-Evoked-GNG.py'], #epochs_pv_fname,
+                    targets=[evoked_gng_fname,], 
+                    actions=['python3 07-Evoked-GNG.py %s %s' % (subj, sess)],                
+                    )
    
