@@ -211,6 +211,16 @@ all_evokeds_control_1= [list() for _ in range(5)]
 all_evokeds_control_2= [list() for _ in range(5)]
 
 
+
+all_evokeds_interv_1_gng = [list() for _ in range(4)]
+all_evokeds_interv_2_gng = [list() for _ in range(4)]
+
+all_evokeds_control_1_gng= [list() for _ in range(4)]
+all_evokeds_control_2_gng= [list() for _ in range(4)]
+
+
+
+
 ###############################################################################
 # Templates for filenames
 #############################################################################
@@ -250,6 +260,8 @@ fname.add('epochs_gng','{folder_gonogo}/{subject}_{session}_gng_epo.fif')
 
 fname.add('evoked_pv','{folder_passview}/{subject}_{session}_pv_ave.fif')
 fname.add('evoked_gng','{folder_gonogo}/{subject}_{session}_gng_ave.fif')
+
+fname.add('metadata_gng','{folder_gonogo}/{subject}_{session}_gng_metadata.csv')
 
 
 fname.add('evoked_pv','{folder_passview}/{subject}_{session}_pv_ave.fif')

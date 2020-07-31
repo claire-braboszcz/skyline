@@ -41,11 +41,27 @@ for subj in subject_ids:
                 
                 df=df.append(logfile.iloc[ind_bloc[2]:ind_bloc[3], :])
             
+          
+            # create column for onset of button press
+            df['response_onset'] =np.nan
+            
+            idx=df.index[df['value']==8]
+            df.loc[idx,['response_onset']] = df.loc[idx, ['onset']].values
+            
+            
             # create column to indicate button press
             df['response']=np.nan
+                      
             
             df.loc[df['value']==8, 'response'] = 'button press'
+            
+            # shift up one cell to align with rest of trial info
             df.response=df.response.shift(-1)
+            df.response_onset=df.response_onset.shift(-1)
+
+             
+            
+            
             
             df.loc[df['value']==11, 'type'] = 'go'
             df.loc[df['value']==13, 'type'] = 'nogo'

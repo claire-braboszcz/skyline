@@ -23,7 +23,6 @@ from config import (fname, erp_bandpass_fmin, erp_bandpass_fmax,
 import pandas as pd
 
 
-
 # Be verbose
 mne.set_log_level('INFO')
 
@@ -94,15 +93,15 @@ print('Interpolating bad channels')
 epochs_gng.interpolate_bads()
 
 # Save evoked plot to the report
-with mne.open_report(fname.report(subject='sub-'+ str(subj), session='ses-'+str(sess))) as report:
-    report.add_figs_to_section(
-        [epochs_gng.average().plot(show=False)],
-        captions= 'Evoked without ICA - Go-Nogo',
-        section=' Go-Nogo Evoked',
-        replace=True
-    )
-    report.save(fname.report_html(subject='sub-'+ str(subj), session='ses-'+str(sess)), overwrite=True,
-                open_browser=False)
+#with mne.open_report(fname.report(subject='sub-'+ str(subj), session='ses-'+str(sess))) as report:
+#    report.add_figs_to_section(
+#        [epochs_gng.average().plot(show=False)],
+#        captions= 'Evoked without ICA - Go-Nogo',
+#        section=' Go-Nogo Evoked',
+#        replace=True
+#    )
+##    report.save(fname.report_html(subject='sub-'+ str(subj), session='ses-'+str(sess)), overwrite=True,
+ #               open_browser=False)
 
 
 # Now apply ICA weights and drop eye movements ICA
@@ -121,25 +120,25 @@ print('Saving file')
 epochs_gng.save(fname.epochs_gng(subject='sub-'+ str(subj), session='ses-'+str(sess)), overwrite = True)
 
 # Save evoked plot to the report
-with mne.open_report(fname.report(subject='sub-'+ str(subj), session='ses-'+str(sess))) as report:
-    report.add_figs_to_section(
-        [epochs_gng.average().plot(show=False)],
-        captions= 'Evoked with ICA - Go-Nogo',
-        section='Go-Nogo Evoked',
-        replace=True
-    )
+#with mne.open_report(fname.report(subject='sub-'+ str(subj), session='ses-'+str(sess))) as report:
+#    report.add_figs_to_section(
+#        [epochs_gng.average().plot(show=False)],
+#        captions= 'Evoked with ICA - Go-Nogo',
+#        section='Go-Nogo Evoked',
+#        replace=True
+#    )
+#    
+#  
+#      
+#    report.add_figs_to_section(
+#        [epochs_gng.plot_drop_log(show=False)],
+#        captions= 'Events Drop Log - Go-Nogo',
+#        section='Go-Nogo Evoked',
+#        replace=True
+#    )
     
-  
-      
-    report.add_figs_to_section(
-        [epochs_gng.plot_drop_log(show=False)],
-        captions= 'Events Drop Log - Go-Nogo',
-        section='Go-Nogo Evoked',
-        replace=True
-    )
     
-    
-    report.save(fname.report_html(subject='sub-'+ str(subj), session='ses-'+str(sess)), overwrite=True,
-                open_browser=False)
-
+#    report.save(fname.report_html(subject='sub-'+ str(subj), session='ses-'+str(sess)), overwrite=True,
+ #               open_browser=False)
+#
 
