@@ -231,7 +231,7 @@ fname = FileNames()
 
 # Some directories
 fname.add('bids_root', '/home/claire/Documents/STUDY/EEG-Tobacco/Skyline-EEG-BIDS/')
-fname.add('bids_root_der', '/home/claire/Documents/STUDY/EEG-Tobacco/Skyline-EEG-BIDS/derivatives/')
+fname.add('bids_root_der', '/home/claire/Documents/STUDY/EEG-Tobacco/Skyline-EEG-BIDS/derivatives')
 
 
 fname.add('folder_preproc', '{bids_root_der}/eeg_preprocess/{subject}/{session}/eeg/')
@@ -280,7 +280,8 @@ fname.add('group_report_html', '{reports_dir}/group_report.html')
 
 # filepath for figures
 
-fname.add('figures_pv', '{bids_root_der}/figures/passive_viewing')
+fname.add('figures_pv', '{bids_root_der}/figures/passive_viewing/')
+fname.add('figures_gng' , '{bids_root_der}/figures/gonogo/')
 
 
 
